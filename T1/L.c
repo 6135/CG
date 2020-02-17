@@ -1,4 +1,20 @@
+/*
+Em linux, para compilar:
+$ gcc -o letraH letraH.c -lGL -lGLU -lglut -lm
+*/
 #include <GL/glut.h>
+
+int main(int argc, char** argv)
+{
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_SINGLE);
+    glutInitWindowSize(400, 300);
+    glutInitWindowPosition(100, 100);
+    glutCreateWindow("Hello world!");
+    glutDisplayFunc(displayMe);
+    glutMainLoop();
+    return 0;
+}
 
 void displayMe(void)
 {
@@ -12,14 +28,3 @@ void displayMe(void)
     glFlush();
 }
  
-int main(int argc, char** argv)
-{
-    glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_SINGLE);
-    glutInitWindowSize(400, 300);
-    glutInitWindowPosition(100, 100);
-    glutCreateWindow("Hello world!");
-    glutDisplayFunc(displayMe);
-    glutMainLoop();
-    return 0;
-}

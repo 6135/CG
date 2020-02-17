@@ -1,9 +1,9 @@
 /*
 Em linux, para compilar:
 $ gcc -o letraH letraH.c -lGL -lGLU -lglut -lm
-
-
 */
+
+
 #include <GL/glut.h>
 #include <stdio.h>\
 #include <stdlib.h>
