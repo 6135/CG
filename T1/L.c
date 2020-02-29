@@ -128,12 +128,21 @@ void display(void)
             glVertex3f(-3,-5,0);
         } glEnd();
 
-        glBegin(GL_POLYGON); { //Bottom, upwards stroke
-            glVertex3f(6,-5,0);
-            glVertex3f(5.2,-5,0);
-            glVertex3f(5.2,-3,0);
-            glVertex3f(6,-3,0);
-
+        glBegin(GL_QUAD_STRIP); { //Bottom, upwards stroke
+            //dist entre cada X aumenta por 0.1 para cada ponto
+            /**
+             * 5.9 - 5.8 = 0.1
+             * 5.8 - 5.6 = 0.2
+             * 5.6 - 5.3 = 0.3
+             * 5.3 - 4.9 = 0.4 etc
+             **/
+            glVertex3f(3.9,-5,0);glVertex3f(6,-5,0);
+            glVertex3f(4.4,-4.9,0);glVertex3f(6,-4.9,0);
+            glVertex3f(4.9,-4.8,0);glVertex3f(6,-4.8,0);
+            glVertex3f(5.3,-4.5,0);glVertex3f(6,-4.5,0);
+            glVertex3f(5.6,-4,0);glVertex3f(6,-4,0);
+            glVertex3f(5.8,-3.5,0);glVertex3f(6,-3.5,0);
+            glVertex3f(5.9,-3,0);glVertex3f(6,-3,0);
         } glEnd();
         
         glBegin(GL_POLYGON); { //top stroke
@@ -142,13 +151,14 @@ void display(void)
             glVertex3f(-4,8,0);
             glVertex3f(-4,7,0);
         } glEnd();
+
     }
     /**
      * 
      * Depth
      * 
      */
-    {
+    /*{
         glColor3f (0.5, 0.5, 0.5);
         //Main block Right
 
@@ -176,10 +186,10 @@ void display(void)
         
 
         //Bottom stroke Bottom part
-           /* glVertex3f(-1.5,-5,0); glVertex3f(-1.5,7,0);
-            glVertex3f(-1.5,-5,-1); glVertex3f(-1.5,7,-1);*/            
+        //glVertex3f(-1.5,-5,0); glVertex3f(-1.5,7,0);
+        //    glVertex3f(-1.5,-5,-1); glVertex3f(-1.5,7,-1);            
     glEnd();
-    }
+    }*/
     glPopMatrix();
     glutSwapBuffers();
 }
