@@ -23,7 +23,6 @@ void init(void)
     glEnable(GL_DEPTH_TEST);
 }
 
-
 /*
 void spinDisplay(void)
 {
@@ -105,30 +104,28 @@ void display(void)
     glRotatef(yrot, 0.0f, 1.0f, 0.0f);
 
     glScalef(5.0, 5.0, 5.0);
-    
     glColor3f (1.0, 0.0, 0.0);
 
     /**
-     * 
      * Front
-     *
      */{
-        glBegin(GL_POLYGON); { //Main block
-            glVertex3f(0,-5,0);
-            glVertex3f(-1.5,-5,0);
-            glVertex3f(-1.5,7,0);
-            glVertex3f(0,7,0);
-
+        glBegin(GL_QUAD_STRIP); { //Main block
+            glVertex3f(0,-5,0);glVertex3f(0,7,0);
+            glVertex3f(-1.5,-5,0);glVertex3f(-1.5,7,0);
         } glEnd();
         
-        glBegin(GL_POLYGON); { //down stroke
-            glVertex3f(6,-5,0);
-            glVertex3f(6,-6,0);
-            glVertex3f(-3,-6,0);
-            glVertex3f(-3,-5,0);
-        } glEnd();
+        glBegin(GL_QUAD_STRIP); { //down stroke
+            glVertex3f(-3.5,-5,0);glVertex3f(-3.5,-6,0);
+            glVertex3f(-2,-5,0);glVertex3f(-1,-6,0);
+            
+            glVertex3f(-2,-5,0);glVertex3f(-2,-6,0); //start curve
+            glVertex3f(-1.75,-4.7,0);glVertex3f(-1.75,-6,0);//midle of the curve
+            glVertex3f(-1.5,-4.5,0);glVertex3f(-1.5,-6,0);//end end
 
-        glBegin(GL_QUAD_STRIP); { //Bottom, upwards stroke
+            glVertex3f(0,-4.5,0);glVertex3f(0,-6,0);//start curve
+            glVertex3f(.25,-4.7,0);glVertex3f(.25,-6,0);//midle of the curve
+            glVertex3f(.5,-5,0);glVertex3f(.5,-6,0); //end end
+
             //dist entre cada X aumenta por 0.1 para cada ponto
             /**
              * 5.9 - 5.8 = 0.1
@@ -136,60 +133,137 @@ void display(void)
              * 5.6 - 5.3 = 0.3
              * 5.3 - 4.9 = 0.4 etc
              **/
-            glVertex3f(3.9,-5,0);glVertex3f(6,-5,0);
-            glVertex3f(4.4,-4.9,0);glVertex3f(6,-4.9,0);
-            glVertex3f(4.9,-4.8,0);glVertex3f(6,-4.8,0);
+            
+            glVertex3f(3.9,-5,0);glVertex3f(3.9,-6,0);
+            glVertex3f(4.4,-4.9,0);glVertex3f(5.7,-5.9,0);
+            glVertex3f(4.9,-4.8,0);glVertex3f(5.9,-5,0);
             glVertex3f(5.3,-4.5,0);glVertex3f(6,-4.5,0);
             glVertex3f(5.6,-4,0);glVertex3f(6,-4,0);
             glVertex3f(5.8,-3.5,0);glVertex3f(6,-3.5,0);
             glVertex3f(5.9,-3,0);glVertex3f(6,-3,0);
+            
+            
         } glEnd();
         
-        glBegin(GL_POLYGON); { //top stroke
-            glVertex3f(2.5,7,0);
-            glVertex3f(2.5,8,0);
-            glVertex3f(-4,8,0);
-            glVertex3f(-4,7,0);
+        glBegin(GL_QUAD_STRIP); { //top stroke
+            glVertex3f(-4,7,0);glVertex3f(-4,8,0);               
+            glVertex3f(-2,7,0); glVertex3f(-2,8,0);
+
+            glVertex3f(-2,7,0);glVertex3f(-2,8,0); //start curve
+            glVertex3f(-1.75,6.7,0);glVertex3f(-1.75,8,0);//midle of the curve
+            glVertex3f(-1.5,6.5,0);glVertex3f(-1.5,8,0);//end end
+
+            glVertex3f(0,6.5,0);glVertex3f(0,8,0);//start
+            glVertex3f(.25,6.7,0);glVertex3f(.25,8,0);//midle of the curve
+            glVertex3f(.5,7,0);glVertex3f(.5,8,0); //end   
+
+            glVertex3f(2.5,7,0);glVertex3f(2.5,8,0);
         } glEnd();
 
     }
     /**
-     * 
      * Depth
-     * 
      */
-    /*{
-        glColor3f (0.5, 0.5, 0.5);
-        //Main block Right
+    glColor3f (0.5, 0.5, 0.5);
+    glBegin(GL_QUAD_STRIP);{ //starting at the top leftmost point of the bottom part of the letter
+        glVertex3f(-3.5,-5,0);glVertex3f(-3.5,-5,-1);
+        glVertex3f(-2,-5,0);glVertex3f(-2,-5,-1);
+           
+        glVertex3f(-2,-5,0);glVertex3f(-2,-5,-1); //start bottom left curve
+        glVertex3f(-1.75,-4.7,0);glVertex3f(-1.75,-4.7,-1);//midle of the curve
+        glVertex3f(-1.5,-4.5,0);glVertex3f(-1.5,-4.5,-1);//end
+        //start going up the main block//
+        glVertex3f(-1.5,6.5,0);glVertex3f(-1.5,6.5,-1); // hits the curved bit top left
+        glVertex3f(-1.75,6.7,0);glVertex3f(-1.75,6.7,-1);//midle of the curve
+        glVertex3f(-2,7,0);glVertex3f(-2,7,-1); // finished curved
 
-    glBegin(GL_QUAD_STRIP);
-        //Bottom Top Right
-        glVertex3f(5.2,-5,0); glVertex3f(5.2,-5,-1);
-        glVertex3f(0,-5,0); glVertex3f(0,-5,-1);   
-
-        //Main right
-        glVertex3f(0,7,0); glVertex3f(0,7,-1);
-        //Top stroke
-        glVertex3f(2.5,7,0); glVertex3f(2.5,7,-1);
-        glVertex3f(2.5,8,0); glVertex3f(2.5,8,-1);
-        glVertex3f(-4,8,0); glVertex3f(-4,8,-1);
-
-        //Main block Left
-        //glVertex3f(-1.5,-5,0); glVertex3f(-1.5,7,0);
-        //glVertex3f(-1.5,-5,-1); glVertex3f(-1.5,7,-1);     
-
-        //
-
-
-        /* bOOT
-        glBegin(GL_QUAD_STRIP); { 
+        glVertex3f(-4,7,0);glVertex3f(-4,7,-1);               
+        glVertex3f(-4,8,0);glVertex3f(-4,8,-1); // top cover
+        glVertex3f(2.5,8,0);glVertex3f(2.5,8,-1);
+        glVertex3f(2.5,7,0);glVertex3f(2.5,7,-1);
         
+        glVertex3f(.5,7,0);glVertex3f(.5,7,-1); //start of the top right curved bit
+        glVertex3f(.25,6.7,0);glVertex3f(.25,6.7,-1);//midle of the curve
+        glVertex3f(0,6.5,0);glVertex3f(0,6.5,-1);//end
+        //start going down the main block
+        glVertex3f(0,-4.5,0);glVertex3f(0,-4.5,0-1);//start curve
+        glVertex3f(.25,-4.7,0);glVertex3f(.25,-4.7,-1);//midle of the curve
+        glVertex3f(.5,-5,0);glVertex3f(.5,-5,-1); //end end
+        //botom with upstroke
+        glVertex3f(3.9,-5,0);glVertex3f(3.9,-5,-1);
+        glVertex3f(4.4,-4.9,0);glVertex3f(4.4,-4.9,-1);
+        glVertex3f(4.9,-4.8,0);glVertex3f(4.9,-4.8,-1);
+        glVertex3f(5.3,-4.5,0);glVertex3f(5.3,-4.5,-1);
+        glVertex3f(5.6,-4,0); glVertex3f(5.6,-4,-1);
+        glVertex3f(5.8,-3.5,0);glVertex3f(5.8,-3.5,-1);
+        glVertex3f(5.9,-3,0); glVertex3f(5.9,-3,-1);        
+        //continue
+        glVertex3f(6,-3,0);  glVertex3f(6,-3,-1);        
+        glVertex3f(6,-3.5,0);glVertex3f(6,-3.5,-1);
+        glVertex3f(6,-4,0);glVertex3f(6,-4,-1);
+        glVertex3f(6,-4.5,0);glVertex3f(6,-4.5,-1);
+        glVertex3f(5.9,-5,0);glVertex3f(5.9,-5,-1);
+        glVertex3f(5.7,-5.9,0);glVertex3f(5.7,-5.9,-1);
+        glVertex3f(3.9,-6,0);glVertex3f(3.9,-6,-1);
+        //bottom strip and bottom left strip
+        glVertex3f(-3.5,-6,0);glVertex3f(-3.5,-6,-1);
+        glVertex3f(-3.5,-5,0);glVertex3f(-3.5,-5,-1);
+    } glEnd();
 
-        //Bottom stroke Bottom part
-        //glVertex3f(-1.5,-5,0); glVertex3f(-1.5,7,0);
-        //    glVertex3f(-1.5,-5,-1); glVertex3f(-1.5,7,-1);            
-    glEnd();
-    }*/
+    /**
+     * Back
+     */{
+        glColor3f(0.0,1.0,0.0);
+        glBegin(GL_QUAD_STRIP); { //Main block
+            glVertex3f(0,-5,-1);glVertex3f(0,7,-1);
+            glVertex3f(-1.5,-5,-1);glVertex3f(-1.5,7,-1);
+
+        } glEnd();
+        
+        glBegin(GL_QUAD_STRIP); { //down stroke
+            glVertex3f(-3.5,-5,-1);glVertex3f(-3.5,-6,-1);
+            glVertex3f(-2,-5,-1);glVertex3f(-1,-6,-1);
+            
+            glVertex3f(-2,-5,-1);glVertex3f(-2,-6,-1); //start curve
+            glVertex3f(-1.75,-4.7,-1);glVertex3f(-1.75,-6,-1);//midle of the curve
+            glVertex3f(-1.5,-4.5,-1);glVertex3f(-1.5,-6,-1);//end end
+
+            glVertex3f(0,-4.5,-1);glVertex3f(0,-6,-1);//end end
+            glVertex3f(.25,-4.7,-1);glVertex3f(.25,-6,-1);//midle of the curve
+            glVertex3f(.5,-5,-1);glVertex3f(.5,-6,-1); //start curve
+
+            //dist entre cada X aumenta por 0.1 para cada ponto
+            /**
+             * 5.9 - 5.8 = 0.1
+             * 5.8 - 5.6 = 0.2
+             * 5.6 - 5.3 = 0.3
+             * 5.3 - 4.9 = 0.4 etc
+             **/
+            glVertex3f(3.9,-5,-1);glVertex3f(3.9,-6,-1);
+            glVertex3f(4.4,-4.9,-1);glVertex3f(5.7,-5.9,-1);
+            glVertex3f(4.9,-4.8,-1);glVertex3f(5.9,-5,-1);
+            glVertex3f(5.3,-4.5,-1);glVertex3f(6,-4.5,-1);
+            glVertex3f(5.6,-4,-1);glVertex3f(6,-4,-1);
+            glVertex3f(5.8,-3.5,-1);glVertex3f(6,-3.5,-1);
+            glVertex3f(5.9,-3,-1);glVertex3f(6,-3,-1);
+            
+        } glEnd();
+        
+        glBegin(GL_QUAD_STRIP); { //top stroke
+            glVertex3f(-4,7,-1);glVertex3f(-4,8,-1);               
+            glVertex3f(-2,7,-1); glVertex3f(-2,8,-1);
+
+            glVertex3f(-2,7,-1);glVertex3f(-2,8,-1); //start curve
+            glVertex3f(-1.75,6.7,-1);glVertex3f(-1.75,8,-1);//midle of the curve
+            glVertex3f(-1.5,6.5,-1);glVertex3f(-1.5,8,-1);//end end
+
+            glVertex3f(0,6.5,-1);glVertex3f(0,8,-1);//end end
+            glVertex3f(.25,6.7,-1);glVertex3f(.25,8,-1);//midle of the curve
+            glVertex3f(.5,7,-1);glVertex3f(.5,8,-1); //start curve    
+
+            glVertex3f(2.5,7,-1);glVertex3f(2.5,8,-1);
+        } glEnd();
+    }
     glPopMatrix();
     glutSwapBuffers();
 }
@@ -198,7 +272,7 @@ int main(int argc, char** argv)
 {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-    glutInitWindowSize(250, 250);
+    glutInitWindowSize(750, 750);
     glutInitWindowPosition(100, 100);
     glutCreateWindow(argv[0]);
     init();
@@ -208,6 +282,7 @@ int main(int argc, char** argv)
     glutMotionFunc(mouseMotion);
     glutMouseFunc(mouse);
     glutMainLoop();
+
     return 0;
 }
 
