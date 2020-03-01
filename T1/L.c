@@ -16,7 +16,20 @@ float yrot = 0.0f;
 static GLfloat spin = 0.0;
 bool mouseDown = false;
 bool fullscreen = false;
+bool moving = false;
 
+typedef struct {
+    double x,y,z;
+}vector3f;
+
+vector3f Vector3f(double x,double y, double z){
+    vector3f result;
+    result.x = x;
+    result.y = y;
+    result.z = z;
+    return result;
+}
+vector3f start;
 void init(void)
 {
     glClearColor (0.0, 0.0, 1.0, 0.0);
@@ -24,13 +37,19 @@ void init(void)
     glEnable(GL_DEPTH_TEST);
 }
 
-
-void spinDisplay(void)
+void spinDisplayPos(void)
 {
-    spin+=0.0001;
+    spin+=0.01;
     if (spin > 60.0)
         spin=spin-360.0; 
     glutPostRedisplay();
+}
+
+void spinDisplayNeg(void){
+    spin-=0.01;
+    if (spin < 60.0)
+        spin=spin+360.0; 
+    glutPostRedisplay();    
 }
 
 void reshape(int w, int h)
@@ -73,24 +92,50 @@ void specialKeyboard(int key, int x, int y) {
     }
 }
 
+void moveObject(int x, int y, int z, vector3f *b){
+
+    double model[16],proj[16],rx,ry,rz;
+    int m_viewport[4];
+
+    glGetDoublev(GL_MODELVIEW_MATRIX, model);
+    glGetDoublev(GL_PROJECTION_MATRIX, proj);
+    glGetIntegerv(GL_VIEWPORT, m_viewport);
+
+    gluUnProject(x,y,z,model,proj,m_viewport,&rx,&ry,&rz);
+    b[0].x = rx;
+    b[0].y = ry;
+    b[0].z = rz;
+}
+
+void moveShape(int x, int y) {
+    moving = true; //bloquear todos os outros movimentos
+    vector3f a;  
+    moveObject(x,y,0,&a);
+    start.x = a.x/3; //dividir para abrandar os movimentos
+    start.y = a.y/6;
+    glutPostRedisplay();
+
+}
+
 void mouse(int button, int state, int x, int y) {
-    if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-        mouseDown = true;
-
-        xdiff = x - yrot;
-        ydiff = -y + xrot;
-    }
-    else
-        mouseDown = false;
-
     switch (button) {
       case GLUT_LEFT_BUTTON:
-        if (state == GLUT_DOWN)
-	  glutIdleFunc(spinDisplay);
+        if (moving == false && state == GLUT_UP) {
+	        glutIdleFunc(spinDisplayPos);
+            moving = true;
+        } else if( moving == true && state == GLUT_UP) {
+            glutIdleFunc(NULL);
+            moving = false;
+        }   
         break;
       case GLUT_RIGHT_BUTTON:
-        if (state == GLUT_DOWN)
-	  glutIdleFunc(NULL);
+        if (moving == false && state == GLUT_UP) {
+	        glutIdleFunc(spinDisplayNeg);
+            moving = true;
+        } else if(moving == true && state == GLUT_UP ) {
+            glutIdleFunc(NULL);
+            moving = false;
+        }
         break;
       default:
         break;
@@ -98,29 +143,20 @@ void mouse(int button, int state, int x, int y) {
     
 }
 
-void mouseMotion(int x, int y) {
-    if (mouseDown){
-        yrot = x - xdiff;
-        xrot = y + ydiff;
-        glutPostRedisplay();
-    }
-}
-
 void display(void)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glPolygonMode(GL_FRONT, GL_FILL);
 
     glPushMatrix();  
     glLoadIdentity();
-
-    glRotatef(xrot, 1.0f, 0.0f, 0.0f);
-    glRotatef(yrot, 0.0f, 1.0f, 0.0f);
+    glScalef(5.0, 5.0, 5.0);
 
     glRotatef(spin, 0.0, 1.0, 0.0); 
-    glRotatef(spin, 1.0+sin(spin), 1.0-sin(spin), 1.0+cos(spin));
+    
+    printf("%f\n",spin);
 
-    glScalef(5.0, 5.0, 5.0);
+    glTranslated(start.x,-start.y,start.z);//grabs the change from mouse and applies to matrix
+
     glColor3f (1.0, 0.0, 0.0);
 
     /**
@@ -297,10 +333,9 @@ int main(int argc, char** argv)
     glutKeyboardFunc(keyboard);
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
-    glutMotionFunc(mouseMotion);
+    glutMotionFunc(moveShape);
     glutMouseFunc(mouse);
     glutMainLoop();
-
     return 0;
 }
 

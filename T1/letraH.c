@@ -104,7 +104,7 @@ void display(void)
 
 void spinDisplay(void)
 {
-    spin=spin+0.1;
+    spin=spin+0.01;
     if (spin > 360.0)
         spin=spin-360.0; 
     glutPostRedisplay();
