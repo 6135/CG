@@ -13,6 +13,7 @@ float xdiff = 0.0f;
 float ydiff = 0.0f;
 float xrot = 0.0f;
 float yrot = 0.0f;
+static GLfloat spin = 0.0;
 bool mouseDown = false;
 bool fullscreen = false;
 
@@ -23,14 +24,14 @@ void init(void)
     glEnable(GL_DEPTH_TEST);
 }
 
-/*
+
 void spinDisplay(void)
 {
     spin+=0.0001;
     if (spin > 60.0)
         spin=spin-360.0; 
     glutPostRedisplay();
-}*/
+}
 
 void reshape(int w, int h)
 {
@@ -81,6 +82,19 @@ void mouse(int button, int state, int x, int y) {
     }
     else
         mouseDown = false;
+
+    switch (button) {
+      case GLUT_LEFT_BUTTON:
+        if (state == GLUT_DOWN)
+	  glutIdleFunc(spinDisplay);
+        break;
+      case GLUT_RIGHT_BUTTON:
+        if (state == GLUT_DOWN)
+	  glutIdleFunc(NULL);
+        break;
+      default:
+        break;
+      }
     
 }
 
@@ -103,12 +117,16 @@ void display(void)
     glRotatef(xrot, 1.0f, 0.0f, 0.0f);
     glRotatef(yrot, 0.0f, 1.0f, 0.0f);
 
+    glRotatef(spin, 0.0, 1.0, 0.0); 
+    glRotatef(spin, 1.0+sin(spin), 1.0-sin(spin), 1.0+cos(spin));
+
     glScalef(5.0, 5.0, 5.0);
     glColor3f (1.0, 0.0, 0.0);
 
     /**
      * Front
-     */{
+     */
+    {
         glBegin(GL_QUAD_STRIP); { //Main block
             glVertex3f(0,-5,0);glVertex3f(0,7,0);
             glVertex3f(-1.5,-5,0);glVertex3f(-1.5,7,0);

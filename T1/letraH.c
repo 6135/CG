@@ -1,7 +1,7 @@
 /*
 Em linux, para compilar:
 $ gcc -o letraH letraH.c -lGL -lGLU -lglut -lm
-*/
+*/ 
 
 
 #include <GL/glut.h>
@@ -31,8 +31,8 @@ void display(void)
     glPushMatrix();
 /*    glTranslatef(-10.0,-10.0,0.0);  */
     glLoadIdentity();
-/*    glRotatef(spin, 0.0, 1.0, 0.0); */
-    /*glRotatef(spin, 1.0+sin(spin), 1.0-sin(spin), 1.0+cos(spin));  
+    glRotatef(spin, 0.0, 1.0, 0.0); 
+    glRotatef(spin, 1.0+sin(spin), 1.0-sin(spin), 1.0+cos(spin));  
     glScalef(3.0, 3.0, 3.0);
     
     glColor3f (1.0, 0.0, 0.0);
@@ -77,7 +77,7 @@ void display(void)
      glVertex3f(-1.5, -1.0, -1.5);
      glVertex3f(-1.5, 1.0, -1.5);
      glVertex3f(1.5, 1.0, -1.5);
-     glEnd();*/
+     glEnd();
 
      glColor3f (0.5, 0.5, 0.5);
     glBegin(GL_QUAD_STRIP);          
