@@ -20,16 +20,9 @@ bool moving = false;
 
 typedef struct {
     double x,y,z;
-}vector3f;
+} ve3f;
+ve3f start;
 
-vector3f Vector3f(double x,double y, double z){
-    vector3f result;
-    result.x = x;
-    result.y = y;
-    result.z = z;
-    return result;
-}
-vector3f start;
 void init(void)
 {
     glClearColor (0.0, 0.0, 1.0, 0.0);
@@ -39,14 +32,14 @@ void init(void)
 
 void spinDisplayPos(void)
 {
-    spin+=0.01;
+    spin+=0.1;
     if (spin > 60.0)
         spin=spin-360.0; 
     glutPostRedisplay();
 }
 
 void spinDisplayNeg(void){
-    spin-=0.01;
+    spin-=0.1;
     if (spin < 60.0)
         spin=spin+360.0; 
     glutPostRedisplay();    
@@ -71,37 +64,17 @@ void idle()
     glutPostRedisplay();
 }
 
-void keyboard(unsigned char key, int x, int y) {
-    switch(key) {
-    case 27 :
-        exit(1);
-        break;
-    }
-}
-
-void specialKeyboard(int key, int x, int y) {
-    if (key == GLUT_KEY_F1) {
-        fullscreen = !fullscreen;
-
-    if (fullscreen)
-        glutFullScreen();
-    else {
-        glutReshapeWindow(500, 500);
-        glutPositionWindow(50, 50);
-    }
-    }
-}
-
-void moveObject(int x, int y, int z, vector3f *b){
+void moveObject(int x, int y, int z, ve3f *b){
 
     double model[16],proj[16],rx,ry,rz;
-    int m_viewport[4];
+    int view[4];
 
-    glGetDoublev(GL_MODELVIEW_MATRIX, model);
-    glGetDoublev(GL_PROJECTION_MATRIX, proj);
-    glGetIntegerv(GL_VIEWPORT, m_viewport);
+    glGetDoublev(GL_MODELVIEW_MATRIX, model); //The params parameter returns 16 values: the modelview matrix on the top of the modelview matrix stack
+    glGetDoublev(GL_PROJECTION_MATRIX, proj); //The params parameter returns 16 values: the projection matrix on the top of the projection matrix stack
+    glGetIntegerv(GL_VIEWPORT, view); //The params parameter returns four values: the x and y window coordinates of the viewport, followed by its width and height
 
-    gluUnProject(x,y,z,model,proj,m_viewport,&rx,&ry,&rz);
+    gluUnProject(x,y,z,model,proj,view,&rx,&ry,&rz); //The gluUnProject function maps the specified window coordinates into object coordinates using modelMatrix, projMatrix, and viewport.
+    //converting then input mouse coordinates to object coordinates as the mouse moves through space
     b[0].x = rx;
     b[0].y = ry;
     b[0].z = rz;
@@ -109,12 +82,11 @@ void moveObject(int x, int y, int z, vector3f *b){
 
 void moveShape(int x, int y) {
     moving = true; //bloquear todos os outros movimentos
-    vector3f a;  
+    ve3f a;  
     moveObject(x,y,0,&a);
-    start.x = a.x/3; //dividir para abrandar os movimentos
+    start.x = a.x/4; //dividir para abrandar os movimentos
     start.y = a.y/6;
     glutPostRedisplay();
-
 }
 
 void mouse(int button, int state, int x, int y) {
@@ -152,13 +124,9 @@ void display(void)
     glScalef(5.0, 5.0, 5.0);
 
     glRotatef(spin, 0.0, 1.0, 0.0); 
-    
-    printf("%f\n",spin);
+    glTranslated(start.x,-start.y,0);//grabs the change from mouse and applies to matrix
 
-    glTranslated(start.x,-start.y,start.z);//grabs the change from mouse and applies to matrix
-
-    glColor3f (1.0, 0.0, 0.0);
-
+    glColor3f (0.0, 0.0, 0.0);
     /**
      * Front
      */
@@ -187,7 +155,6 @@ void display(void)
              * 5.6 - 5.3 = 0.3
              * 5.3 - 4.9 = 0.4 etc
              **/
-            
             glVertex3f(3.9,-5,0);glVertex3f(3.9,-6,0);
             glVertex3f(4.4,-4.9,0);glVertex3f(5.7,-5.9,0);
             glVertex3f(4.9,-4.8,0);glVertex3f(5.9,-5,0);
@@ -195,7 +162,6 @@ void display(void)
             glVertex3f(5.6,-4,0);glVertex3f(6,-4,0);
             glVertex3f(5.8,-3.5,0);glVertex3f(6,-3.5,0);
             glVertex3f(5.9,-3,0);glVertex3f(6,-3,0);
-            
             
         } glEnd();
         
@@ -218,7 +184,7 @@ void display(void)
     /**
      * Depth
      */
-    glColor3f (0.5, 0.5, 0.5);
+    glColor3f (1.0, 1.0, 1.0);
     glBegin(GL_QUAD_STRIP);{ //starting at the top leftmost point of the bottom part of the letter
         glVertex3f(-3.5,-5,0);glVertex3f(-3.5,-5,-1);
         glVertex3f(-2,-5,0);glVertex3f(-2,-5,-1);
@@ -263,11 +229,10 @@ void display(void)
         glVertex3f(-3.5,-6,0);glVertex3f(-3.5,-6,-1);
         glVertex3f(-3.5,-5,0);glVertex3f(-3.5,-5,-1);
     } glEnd();
-
+    glColor3f (0.0, 0.0, 0.0);
     /**
      * Back
      */{
-        glColor3f(0.0,1.0,0.0);
         glBegin(GL_QUAD_STRIP); { //Main block
             glVertex3f(0,-5,-1);glVertex3f(0,7,-1);
             glVertex3f(-1.5,-5,-1);glVertex3f(-1.5,7,-1);
@@ -330,7 +295,6 @@ int main(int argc, char** argv)
     glutInitWindowPosition(100, 100);
     glutCreateWindow(argv[0]);
     init();
-    glutKeyboardFunc(keyboard);
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
     glutMotionFunc(moveShape);
