@@ -5,7 +5,6 @@ $ gcc -o letraH letraH.c -lGL -lGLU -lglut -lm
 #include <GL/glut.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
 #include <stdbool.h>
 
 #define PI 3.14159
@@ -15,7 +14,6 @@ float xrot = 0.0f;
 float yrot = 0.0f;
 static GLfloat spin = 0.0;
 bool mouseDown = false;
-bool fullscreen = false;
 bool moving = false;
 
 typedef struct {
@@ -84,18 +82,18 @@ void moveShape(int x, int y) {
     moving = true; //bloquear todos os outros movimentos
     ve3f a;  
     moveObject(x,y,0,&a);
-    start.x = a.x/4; //dividir para abrandar os movimentos
-    start.y = a.y/6;
+    start.x = a.x/5; //dividir para abrandar os movimentos devido a escala
+    start.y = a.y/5;
     glutPostRedisplay();
 }
 
-void mouse(int button, int state, int x, int y) {
+void mouse(int button, int state) {
     switch (button) {
       case GLUT_LEFT_BUTTON:
         if (moving == false && state == GLUT_UP) {
 	        glutIdleFunc(spinDisplayPos);
             moving = true;
-        } else if( moving == true && state == GLUT_UP) {
+        } else if( moving == true && state == GLUT_DOWN) {
             glutIdleFunc(NULL);
             moving = false;
         }   
@@ -104,7 +102,7 @@ void mouse(int button, int state, int x, int y) {
         if (moving == false && state == GLUT_UP) {
 	        glutIdleFunc(spinDisplayNeg);
             moving = true;
-        } else if(moving == true && state == GLUT_UP ) {
+        } else if(moving == true && state == GLUT_DOWN ) {
             glutIdleFunc(NULL);
             moving = false;
         }
