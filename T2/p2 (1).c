@@ -3,29 +3,18 @@
 #include <stdlib.h>
 #include <math.h>
 #include <stdbool.h>
-#include <string.h>
-#include "our_strings.h"
-#include "importmodel.h"
-#include <unistd.h>
-
 #define PI 3.14159
+static GLfloat spin = 0.0;
 #define ON 1
 #define OFF 0
+GLfloat angle, fAspect;
 bool mouseDown = false;
-double spinSpeed = 3;
+double spinSpeed = 0.1;
 int representation = 1, shading = 0, light = 1, antialiasing = 0; //menu labels
 GLfloat luzAmbiente[4]={0.2,0.2,0.2,1.0}; 
 GLfloat posicaoLuz[4]={0.0, 50.0, 50.0, 1.0};
-GLfloat size = 20.0f, tilt = 3.0f, spin = 0.0, angle, fAspect;
-
-FILE *fp;
-const char** objectNameArray;
-const char** objectPathArray;
-const char** objectOutHArray;
-const char** objectOutCArray;
-int objects;
-//Model* objectsArray;
-int objectsNumber;
+GLfloat size = 20.0f;
+GLfloat tilt = 3.0f;
 
 void init(void){	
 	// Ativa o uso da luz ambiente 
@@ -69,7 +58,7 @@ void init(void){
 void display(void)
 {
 	//menu for lighting
-	if(light==ON){	
+	if(!light==ON){	
 		luzAmbiente[0]=0.2;
 		luzAmbiente[1]=0.2;
 		luzAmbiente[2]=0.2;
@@ -87,14 +76,14 @@ void display(void)
 		glShadeModel(GL_SMOOTH);
 	
 	//menu for antialiasing
-	if (antialiasing==ON){
+	if (!antialiasing==ON){
 		glEnable(GL_BLEND);
-		glDisable(GL_DEPTH_TEST);
+		//glDisable(GL_DEPTH_TEST);
 		glEnable(GLUT_MULTISAMPLE);
 	}
 	else{
 		glDisable(GL_BLEND);
-		glEnable(GL_DEPTH_TEST);
+		//glEnable(GL_DEPTH_TEST);
 		glDisable(GLUT_MULTISAMPLE);
 	}
 		
@@ -105,11 +94,10 @@ void display(void)
     glColor3f(0.0f, 0.0f, 1.0f);
     
     //
-    if (representation==ON)
+    if (!representation==ON)
     	glutSolidTeapot(size);
     else
     	glutWireTeapot(size);
-        
     glScalef(1.0, 1.0, 1.0);           
     glPopMatrix();
     glutSwapBuffers();
@@ -281,12 +269,10 @@ void mouse(int button, int state, int x, int y)
 void TeclasEspeciais(int key, int x, int y)
 {
     if(key == GLUT_KEY_LEFT) {
-        //glutIdleFunc(spinDisplayAntiClockWise); //spins anti clockwise
-        spinDisplayAntiClockWise();
+        glutIdleFunc(spinDisplayAntiClockWise); //spins anti clockwise
     }
     if(key == GLUT_KEY_RIGHT) {
-        //glutIdleFunc(spinDisplayClockWise);   	//spins clockwise
-        spinDisplayClockWise();
+        glutIdleFunc(spinDisplayClockWise);   	//spins clockwise
     }
     if(key == GLUT_KEY_UP) {
        glRotatef(-tilt, 1-sin(tilt), 0, 0);			//tilt up
@@ -318,58 +304,10 @@ void NormalKeyHandler (unsigned char key, int x, int y)
     
 	glutPostRedisplay();
 }
-void printmodeData(float positions[][3], float texels[][2], float normals[][3], int faces[][12]){
-    printf("P1: %f %f %f\nT1: %f %f\nN1: %f %f %f\nF1V1: %d %d %d",
-        positions[0][0], positions[0][1], positions[0][2],
-        texels[0][0], texels[0][1],
-        normals[0][0], normals[0][1], normals[0][2],
-        faces[0][0], faces[0][1], faces[0][2]
-    );
-}
-void modelData(Model a,const char* filepath,const char* name,const char* header,const char* cont){
-    float positions[a.positions][3];    // XYZ
-    float texels[a.texels][2];          // UV
-    float normals[a.normals][3];        // XYZ
-    int faces[a.faces][12];              // PTN PTN PTN PTN
-    extractOBJdata(filepath, positions, texels, normals, faces);
-    
-    if(access(header,R_OK)==-1)
-        writeH(header,name,a);
-
-    printf("teste1\n");
-    char word[100] = "Vertices";
-    strcat(word,cont);
-    printf("String: %s\n",word);
-    if(access(word,R_OK)==-1)
-        writeCvertices(word,name,a);
-
-    strcpy(word,"Positions");
-    strcat(word,cont);
-    if(access(word,R_OK)==-1)
-        writeCpositions(word,name,a,faces,positions);
-
-}
 
 int main(int argc, char** argv)
 {
-    objectNameArray = malloc(1000*sizeof(char*));
-    objectPathArray = malloc(1000*sizeof(char*));
-    objectOutHArray = malloc(1000*sizeof(char*));
-    objectOutCArray = malloc(1000*sizeof(char*));
-    objectsNumber = form_data("objectList.txt",objectNameArray,objectPathArray,objectOutHArray,objectOutCArray);
-
-    Model modelArray[objectsNumber];
-    for(int i = 0; i<objectsNumber;i++){
-        modelArray[i]=get_object_info(objectPathArray[i]);
-        modelData(modelArray[i],objectPathArray[i],objectNameArray[i],objectOutHArray[i],objectOutCArray[i]);
-    }
- 
-    //to_format(objectNameArray[0],".obj");
-    //to_format(objectOutCArray)
-    //printf("%s",objectNameArray[0]);
-
-    //our_strings.c importmodel.c
-    /*glutInit(&argc, argv);
+    glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowSize(500, 500);
     glutInitWindowPosition(100, 100);
@@ -380,6 +318,6 @@ int main(int argc, char** argv)
     glutMouseFunc(mouse);
     glutSpecialFunc(TeclasEspeciais); 
     glutKeyboardFunc (NormalKeyHandler);
-    glutMainLoop();*/
+    glutMainLoop();
     return 0;
 }
