@@ -15,6 +15,7 @@
 #include "ballon.h"
 #include "ballon.c"
 
+#define NELEMS(x) (sizeof(x)/sizeof(x[0]))
 #define PI 3.14159
 #define ON 1
 #define OFF 0
@@ -121,7 +122,7 @@ void display(void)
     glBegin(GL_TRIANGLES); {
         //int size = sizeof(ballonPositions);
         //printf("%d\n",ballonVertices);
-        for(int i = 0; i < 3852; i+=3){
+        for(int i = 0; i < NELEMS(ballonPostitons); i+=3){
             glVertex3f(ballonPostitons[i],ballonPostitons[i+1],ballonPostitons[i+2]);
             //printf("(%f,%f,%f)\n",ballonPostitons[i],ballonPostitons[i+1],ballonPostitons[i+2]);
         }
