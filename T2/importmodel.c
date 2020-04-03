@@ -7,8 +7,9 @@
 #include "importmodel.h"
 #include "our_strings.h"
 
-Model model(int v, int p, int t , int n, int f){
+Model model(char* name, int v, int p, int t , int n, int f){
     Model res;
+    strcpy(res.name,name);
     res.vertices = v;
     res.positions = p;
     res.texels = t;
@@ -23,6 +24,8 @@ Vertix vertix(float x, float y, float z){
     res.z=z;
     return res;
 }
+
+
 int register_objects(char* filename, const char** object_names){
     FILE *f;
     f = fopen(filename,"r");
@@ -58,7 +61,7 @@ void model_info_print(Model a){
     printf("ver: %d pos: %d tex: %d norm: %d f: %d",a.vertices,a.positions,a.texels,a.normals,a.faces);
 }
 
-Model get_object_info(const char* modelpath){
+Model get_object_info(const char* modelpath, char* name){
     FILE *fp;
     fp = fopen(modelpath,"r");
     char buffer[1000];
@@ -79,7 +82,7 @@ Model get_object_info(const char* modelpath){
     }
     int v = f*4;
     fclose(fp);
-    return model(v,p,vt,vn,f);
+    return model(name,v,p,vt,vn,f);
 }
 
 void extractOBJdata(const char* modelpath, float positions[][3], float texels[][2], float normals[][3], int faces[][12]){
@@ -133,14 +136,14 @@ void extractOBJdata(const char* modelpath, float positions[][3], float texels[][
     fclose(fp);
 }
 
-void writeH(const char* filename,const char* name, Model a)
+void writeH(const char* filename, Model a)
 {
     // 2
     // Create H file
     FILE *fp;
     fp = fopen(filename,"w");
     
-    fprintf(fp,"//%s %s\n","This is header file for the model:",name);
+    fprintf(fp,"//%s %s\n","This is header file for the model:",a.name);
 
     // Write statistics
     fprintf(fp,"// Positions: %d\n", a.positions);
@@ -150,47 +153,49 @@ void writeH(const char* filename,const char* name, Model a)
     fprintf(fp,"// Vertices: %d\n",a.vertices); 
     
     // Write declarations
-    fprintf(fp,"const int %sVertices;\n", name);
-    fprintf(fp,"const float %sPositions[%d];\n",name,a.vertices*3); 
-    fprintf(fp,"const float %sTexels[%d];\n",name,a.vertices*2); 
-    fprintf(fp,"const float %sNormals[%d];\n",name,a.vertices*3); 
+    fprintf(fp,"const int %sVertices;\n", a.name);
+    fprintf(fp,"const float %sPositions[%d];\n",a.name,a.vertices*3); 
+    fprintf(fp,"const float %sTexels[%d];\n",a.name,a.vertices*2); 
+    fprintf(fp,"const float %sNormals[%d];\n",a.name,a.vertices*3); 
     
     fclose(fp);
 }
 
-void writeCvertices(const char* filename,const char* name, Model a){
+void writeCvertices(const char* filename, Model a){
     FILE *fp;printf("Im here");
     fp = fopen(filename,"w");
     
-    fprintf(fp,"//%s %s\n","This is .c file for the model:",name);
+    fprintf(fp,"//%s %s\n","This is .c file for the model:",a.name);
 
-    fprintf(fp,"#include \"%s.h\"\n",name);
-    fprintf(fp,"const int %sVertices = %d;\n",name,a.vertices);
+    fprintf(fp,"#include \"%s.h\"\n",a.name);
+    fprintf(fp,"const int %sVertices = %d;\n",a.name,a.vertices);
     fclose(fp);
 }
 
-void writeCpositions(const char *filename, const char* name, Model model, int faces[][12], float positions[][3])
+void writeCpositions(const char *filename,Model a, int faces[][12], float positions[][3])
 {    
 
     FILE *fp;
     fp = fopen(filename,"w");
 
-    fprintf(fp,"const float %sPostitons[%d] = {\n",name,model.vertices*4);
-    for(int i=0;i<model.faces;i++){
-        int va = faces[i][0];
-        int vb = faces[i][3];
-        int vc = faces[i][6];
+    fprintf(fp,"const float %sPostitons[%d] = {\n",a.name,a.vertices*3);
+    for(int i=0;i<a.faces;i++){
+        int va = faces[i][0] -1;
+        int vb = faces[i][3] -1;
+        int vc = faces[i][6] -1;
+        int vd = faces[i][9] -1;
 
         fprintf(fp,"%f, %f, %f\n",positions[va][0],positions[va][1],positions[va][2]);
         fprintf(fp,"%f, %f, %f\n",positions[vb][0],positions[vb][1],positions[vb][2]);
         fprintf(fp,"%f, %f, %f\n",positions[vc][0],positions[vc][1],positions[vc][2]);
+        fprintf(fp,"%f, %f, %f\n",positions[vd][0],positions[vd][1],positions[vd][2]);
     }
 
     fprintf(fp,"};\n");
     fclose(fp);
 }
 
-void writeCtexels(const char* fp, const char* name, Model model, int faces[][9], float texels[][2])
+void writeCtexels(const char* fp,Model a, int faces[][12], float texels[][2])
 {
     /*// Append C file
     ofstream outC;
@@ -216,7 +221,7 @@ void writeCtexels(const char* fp, const char* name, Model model, int faces[][9],
     outC.close();*/
 }
 
-void writeCnormals(const char* fp, const char* name, Model model, int faces[][9], float normals[][3])
+void writeCnormals(const char* fp,Model a, int faces[][12], float normals[][3])
 {
     /*// Append C file
     ofstream outC;

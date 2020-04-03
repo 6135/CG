@@ -334,19 +334,19 @@ void modelData(Model a,const char* filepath,const char* name,const char* header,
     extractOBJdata(filepath, positions, texels, normals, faces);
     
     if(access(header,R_OK)==-1)
-        writeH(header,name,a);
+        writeH(header,a);
 
     printf("teste1\n");
     char word[100] = "Vertices";
     strcat(word,cont);
     printf("String: %s\n",word);
     if(access(word,R_OK)==-1)
-        writeCvertices(word,name,a);
+        writeCvertices(word,a);
 
     strcpy(word,"Positions");
     strcat(word,cont);
     if(access(word,R_OK)==-1)
-        writeCpositions(word,name,a,faces,positions);
+        writeCpositions(word,a,faces,positions);
 
 }
 
@@ -360,7 +360,7 @@ int main(int argc, char** argv)
 
     Model modelArray[objectsNumber];
     for(int i = 0; i<objectsNumber;i++){
-        modelArray[i]=get_object_info(objectPathArray[i]);
+        modelArray[i]=get_object_info(objectPathArray[i],objectNameArray[i]);
         modelData(modelArray[i],objectPathArray[i],objectNameArray[i],objectOutHArray[i],objectOutCArray[i]);
     }
  
