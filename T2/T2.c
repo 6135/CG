@@ -3,14 +3,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-
 #include <stdbool.h>
-
 #include <string.h>
-#include "our_strings.h"
-#include "importmodel.h"
 #include <unistd.h>
 
+
+#include "our_strings.h"
+#include "our_strings.c"
+#include "importmodel.h"
+#include "importmodel.c"
 #include "ballon.h"
 #include "ballon.c"
 
@@ -113,20 +114,19 @@ void display(void)
     glColor3f(0.0f, 0.0f, 1.0f);
     
     //
-    if (representation==ON) {
-    	//glutSolidTeapot(size);    
-        glBegin(GL_TRIANGLES); {
-            //int size = sizeof(ballonPositions);
-            //printf("%d\n",ballonVertices);
-            for(int i = 0; i < 3852; i+=3){
-                glVertex3f(ballonPostitons[i],ballonPostitons[i+1],ballonPostitons[i+2]);
-                //printf("(%f,%f,%f)\n",ballonPostitons[i],ballonPostitons[i+1],ballonPostitons[i+2]);
-            }
-        } glEnd();
-    }
-    /*else
-    	glutWireTeapot(size);*/
-        
+    if ((representation==ON))
+        glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+    else
+        glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+    glBegin(GL_TRIANGLES); {
+        //int size = sizeof(ballonPositions);
+        //printf("%d\n",ballonVertices);
+        for(int i = 0; i < 3852; i+=3){
+            glVertex3f(ballonPostitons[i],ballonPostitons[i+1],ballonPostitons[i+2]);
+            //printf("(%f,%f,%f)\n",ballonPostitons[i],ballonPostitons[i+1],ballonPostitons[i+2]);
+        }
+    } glEnd();
+
     glScalef(1.0, 1.0, 1.0);           
     glPopMatrix();
     glutSwapBuffers();
@@ -198,10 +198,10 @@ void MenuRepresentation(int op)
 {
    switch(op) {
             case 0:
-                     representation = OFF;
+                     representation = ON;
                      break;
             case 1:
-                     representation = ON;
+                     representation = OFF;
                      break;
     }
     glutPostRedisplay();
