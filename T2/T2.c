@@ -1,12 +1,18 @@
+
 #include <GL/glut.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+
 #include <stdbool.h>
+
 #include <string.h>
 #include "our_strings.h"
 #include "importmodel.h"
 #include <unistd.h>
+
+#include "ballon.h"
+#include "ballon.c"
 
 #define PI 3.14159
 #define ON 1
@@ -62,6 +68,8 @@ void init(void){
 	glEnable(GLUT_MULTISAMPLE);
     angle=45;
     //glClearColor (1, 1.0, 1.0, 1.0);
+
+
     
 }
 
@@ -105,10 +113,19 @@ void display(void)
     glColor3f(0.0f, 0.0f, 1.0f);
     
     //
-    if (representation==ON)
-    	glutSolidTeapot(size);
-    else
-    	glutWireTeapot(size);
+    if (representation==ON) {
+    	//glutSolidTeapot(size);    
+        glBegin(GL_TRIANGLES); {
+            //int size = sizeof(ballonPositions);
+            //printf("%d\n",ballonVertices);
+            for(int i = 0; i < 3852; i+=3){
+                glVertex3f(ballonPostitons[i],ballonPostitons[i+1],ballonPostitons[i+2]);
+                //printf("(%f,%f,%f)\n",ballonPostitons[i],ballonPostitons[i+1],ballonPostitons[i+2]);
+            }
+        } glEnd();
+    }
+    /*else
+    	glutWireTeapot(size);*/
         
     glScalef(1.0, 1.0, 1.0);           
     glPopMatrix();
@@ -318,37 +335,6 @@ void NormalKeyHandler (unsigned char key, int x, int y)
     
 	glutPostRedisplay();
 }
-void printmodeData(float positions[][3], float texels[][2], float normals[][3], int faces[][12]){
-    printf("P1: %f %f %f\nT1: %f %f\nN1: %f %f %f\nF1V1: %d %d %d",
-        positions[0][0], positions[0][1], positions[0][2],
-        texels[0][0], texels[0][1],
-        normals[0][0], normals[0][1], normals[0][2],
-        faces[0][0], faces[0][1], faces[0][2]
-    );
-}
-void modelData(Model a,const char* filepath,const char* name,const char* header,const char* cont){
-    float positions[a.positions][3];    // XYZ
-    float texels[a.texels][2];          // UV
-    float normals[a.normals][3];        // XYZ
-    int faces[a.faces][12];              // PTN PTN PTN PTN
-    extractOBJdata(filepath, positions, texels, normals, faces);
-    
-    if(access(header,R_OK)==-1)
-        writeH(header,a);
-
-    printf("teste1\n");
-    char word[100] = "Vertices";
-    strcat(word,cont);
-    printf("String: %s\n",word);
-    if(access(word,R_OK)==-1)
-        writeCvertices(word,a);
-
-    strcpy(word,"Positions");
-    strcat(word,cont);
-    if(access(word,R_OK)==-1)
-        writeCpositions(word,a,faces,positions);
-
-}
 
 int main(int argc, char** argv)
 {
@@ -361,15 +347,15 @@ int main(int argc, char** argv)
     Model modelArray[objectsNumber];
     for(int i = 0; i<objectsNumber;i++){
         modelArray[i]=get_object_info(objectPathArray[i],objectNameArray[i]);
-        modelData(modelArray[i],objectPathArray[i],objectNameArray[i],objectOutHArray[i],objectOutCArray[i]);
+        modelData(modelArray[i],objectPathArray[i],objectOutHArray[i],objectOutCArray[i]);
     }
  
     //to_format(objectNameArray[0],".obj");
     //to_format(objectOutCArray)
     //printf("%s",objectNameArray[0]);
 
-    //our_strings.c importmodel.c
-    /*glutInit(&argc, argv);
+    //our_strings.c importmodel.c Normalsballon.c
+    glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowSize(500, 500);
     glutInitWindowPosition(100, 100);
@@ -380,6 +366,6 @@ int main(int argc, char** argv)
     glutMouseFunc(mouse);
     glutSpecialFunc(TeclasEspeciais); 
     glutKeyboardFunc (NormalKeyHandler);
-    glutMainLoop();*/
+    glutMainLoop();
     return 0;
 }

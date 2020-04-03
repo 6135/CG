@@ -2,7 +2,8 @@
     "files.associations": {
         "importmodel.h": "c",
         "strings_p.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "ballon.h": "c"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }
