@@ -339,7 +339,7 @@ void NormalKeyHandler (unsigned char key, int x, int y)
 
 int main(int argc, char** argv)
 {
-    objectNameArray = malloc(1000*sizeof(char*));
+    /*objectNameArray = malloc(1000*sizeof(char*));
     objectPathArray = malloc(1000*sizeof(char*));
     objectOutHArray = malloc(1000*sizeof(char*));
     objectOutCArray = malloc(1000*sizeof(char*));
@@ -349,7 +349,7 @@ int main(int argc, char** argv)
     for(int i = 0; i<objectsNumber;i++){
         modelArray[i]=get_object_info(objectPathArray[i],objectNameArray[i]);
         modelData(modelArray[i],objectPathArray[i],objectOutHArray[i],objectOutCArray[i]);
-    }
+    }*/
  
     //to_format(objectNameArray[0],".obj");
     //to_format(objectOutCArray)
