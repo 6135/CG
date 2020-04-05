@@ -25,12 +25,12 @@ void all_to_format(const char**objs,int n, char*format);
 int form_data(char *filename,const char** objsn, const char **objs, const char **objsouth, const char** objsoutc);
 Model get_object_info(const char* modelpath, char* name);
 void model_info_print(Model a);
-void extractOBJdata(const char* modelpath, float positions[][3], float texels[][2], float normals[][3], int faces[][9]);
+void extractOBJdata(const char* modelpath, float** positions, float** texels, float** normals, int** faces);
 void writeH(const char* filename, Model a);
 void writeCvertices(const char* filename, Model a);
-void writeCpositions(const char *filename, Model a, int faces[][9], float positions[][3]);
-void writeCtexels(const char* filename,Model a, int faces[][9], float texels[][2]);
-void writeCnormals(const char* filename,Model a, int faces[][9], float normals[][3]);
+void writeCpositions(const char *filename, Model a, int** faces, float** positions);
+void writeCtexels(const char* filename,Model a, int** faces, float** texels);
+void writeCnormals(const char* filename,Model a, int** faces, float** normals);
 void modelData(Model a,const char* filepath,const char* header,const char* cont);
 
 

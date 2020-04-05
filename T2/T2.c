@@ -12,8 +12,8 @@
 #include "our_strings.c"
 #include "importmodel.h"
 #include "importmodel.c"
-#include "ballon.h"
-#include "ballon.c"
+#include "table.h"
+#include "table.c"
 
 #define NELEMS(x) (sizeof(x)/sizeof(x[0]))
 #define PI 3.14159
@@ -24,7 +24,7 @@ double spinSpeed = 3;
 int representation = 1, shading = 0, light = 1, antialiasing = 0; //menu labels
 GLfloat luzAmbiente[4]={0.2,0.2,0.2,1.0}; 
 GLfloat posicaoLuz[4]={0.0, 50.0, 50.0, 1.0};
-GLfloat size = 20.0f, tilt = 3.0f, spin = 0.0, angle, fAspect;
+GLfloat size = 10.0f, tilt = 3.0f, spin = 0.0, angle, fAspect;
 
 FILE *fp;
 const char** objectNameArray;
@@ -78,6 +78,7 @@ void init(void){
 // Função callback chamada para fazer o desenho
 void display(void)
 {
+    glPushMatrix();
 	//menu for lighting
 	if(light==ON){	
 		luzAmbiente[0]=0.2;
@@ -110,7 +111,6 @@ void display(void)
 		
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     //glPolygonMode(GL_FRONT, GL_FILL);
-    glPushMatrix();
     glRotatef(spin, 0, 1.0-sin(spin), 0); 
     glColor3f(0.0f, 0.0f, 1.0f);
     
@@ -122,13 +122,13 @@ void display(void)
     glBegin(GL_TRIANGLES); {
         //int size = sizeof(ballonPositions);
         //printf("%d\n",ballonVertices);
-        for(int i = 0; i < NELEMS(ballonPostitons); i+=3){
-            glVertex3f(ballonPostitons[i],ballonPostitons[i+1],ballonPostitons[i+2]);
+        for(int i = 0; i < NELEMS(tablePostitons); i+=3){
+            glVertex3f(tablePostitons[i],tablePostitons[i+1],tablePostitons[i+2]);
             //printf("(%f,%f,%f)\n",ballonPostitons[i],ballonPostitons[i+1],ballonPostitons[i+2]);
         }
     } glEnd();
 
-    glScalef(1.0, 1.0, 1.0);           
+    glScalef(0.01,0.01,0.01);           
     glPopMatrix();
     glutSwapBuffers();
     // Define os parâmetros da luz de número 0
@@ -175,7 +175,8 @@ void EspecificaParametrosVisualizacao(void)
 void reshape(int w, int h)
 {
 	// Para previnir uma divisão por zero
-	if ( h == 0 ) h = 1;
+	if ( h == 0 ) 
+        h = 1;
 
 	// Especifica o tamanho da viewport
     glViewport(0, 0, w, h);
@@ -312,6 +313,7 @@ void TeclasEspeciais(int key, int x, int y)
     if(key == GLUT_KEY_DOWN) {
         glRotatef(+tilt, 1+sin(tilt), 0, 0);			//tilt down
     }
+
     glutPostRedisplay();
 
 }
@@ -320,9 +322,9 @@ void TeclasEspeciais(int key, int x, int y)
 void NormalKeyHandler (unsigned char key, int x, int y)
 {
     if (key == 'z' && spinSpeed>0)//spins slower
-        spinSpeed-=0.02;
+        spinSpeed-=0.2;
     else if (key == 'a')		//spins faster
-        spinSpeed+=0.02;
+        spinSpeed+=0.2;
     else if(key == 27)
       	exit (0);	
     else if(key == 43){ // Zoom-in
@@ -333,13 +335,13 @@ void NormalKeyHandler (unsigned char key, int x, int y)
       	angle += 5;
       	EspecificaParametrosVisualizacao();
     }	
-    
+    printf("%f\n",spinSpeed);
 	glutPostRedisplay();
 }
 
 int main(int argc, char** argv)
-{
-    /*objectNameArray = malloc(1000*sizeof(char*));
+{/*
+    objectNameArray = malloc(1000*sizeof(char*));
     objectPathArray = malloc(1000*sizeof(char*));
     objectOutHArray = malloc(1000*sizeof(char*));
     objectOutCArray = malloc(1000*sizeof(char*));
@@ -347,8 +349,11 @@ int main(int argc, char** argv)
 
     Model modelArray[objectsNumber];
     for(int i = 0; i<objectsNumber;i++){
+        printf("Processing model data!\n");
         modelArray[i]=get_object_info(objectPathArray[i],objectNameArray[i]);
+        printf("Model set!\n");
         modelData(modelArray[i],objectPathArray[i],objectOutHArray[i],objectOutCArray[i]);
+        printf("Processed!\n");
     }*/
  
     //to_format(objectNameArray[0],".obj");
