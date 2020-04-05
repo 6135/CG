@@ -17191,7 +17191,7 @@ const float balloonNormals[17181] = {
 void render_object_balloon() {
 
 	int size = (sizeof(balloonPositions)/sizeof(balloonPositions[0]));
-    printf("display_init");
+    //printf("display_init");
 	glBegin(GL_TRIANGLES); {
 		for(int i=0;i<size;i+=3){
             glNormal3f(balloonNormals[i],balloonNormals[i+1],balloonNormals[i+2]);
