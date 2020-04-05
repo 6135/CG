@@ -14,11 +14,11 @@
 #include "importmodel.h"
 #include "importmodel.c"
 
-#include "balloon.h"
-#include "balloon.c"
+#include "resources/house.h"
+#include "resources/house.c"
 
-#include "house.c"
-#include "house.h"
+#include "resources/balloon.h"
+#include "resources/balloon.c"
 
 #define NELEMS(x) (sizeof(x)/sizeof(x[0]))
 #define PI 3.14159
@@ -37,13 +37,14 @@ const char** objectNameArray;
 const char** objectPathArray;
 const char** objectOutHArray;
 const char** objectOutCArray;
+const char** objectTextArray;
 int objects;
 //Model* objectsArray;
 int objectsNumber;
 
 void andTheBalloonGoesAndUpAndDown_UpAndDown_UpAndDown(){
     balloonY+=balloonMov;
-    if(balloonY>=delta){
+    if(balloonY>=delta-1){
         balloonMov = -1;
     }else if(balloonY<=0){
         balloonMov = 1;
@@ -51,15 +52,15 @@ void andTheBalloonGoesAndUpAndDown_UpAndDown_UpAndDown(){
 }
 
 void upAndDown_Helper(int i){
-    printf("Y: %d\n",balloonY);
+    //printf("Y: %d\n",balloonY);
     if(balloonY>=delta-1){
-        printf("Time to wait!");
+        //printf("Time to wait!");
         if(i<=0) {
             balloonY-=2;
             glutTimerFunc(5,upAndDown_Helper,800);
         }
         else {
-            printf("I: %d\n",i);
+            //printf("I: %d\n",i);
             glutTimerFunc(5,upAndDown_Helper,--i);
         }
     } else {
@@ -148,20 +149,16 @@ void display(void)
     glRotatef(spin, 0, 1.0-sin(spin), 0); 
     glRotatef(tilt, 1-sin(tilt), 0, 0);
     glTranslatef(0,balloonY,0);
-    glColor3f(0.0f, 0.0f, 1.0f);
     
     //
     if ((representation==ON))
         glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
     else
         glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
-    
     render_object_balloon();
     glScalef(0.25, 0.25, 0.25);           
     glPopMatrix();
-
     glPushMatrix();
-    glColor3f(0.0f, 1.0f, 0.0f);
     render_object_house();
     glPopMatrix();
     glutSwapBuffers();
@@ -393,18 +390,20 @@ void NormalKeyHandler (unsigned char key, int x, int y)
 
 int main(int argc, char** argv)
 {
-    objectNameArray = malloc(1000*sizeof(char*));
-    objectPathArray = malloc(1000*sizeof(char*));
-    objectOutHArray = malloc(1000*sizeof(char*));
-    objectOutCArray = malloc(1000*sizeof(char*));
-    objectsNumber = form_data("objectList.txt",objectNameArray,objectPathArray,objectOutHArray,objectOutCArray);
-
+    objectNameArray = malloc(100*sizeof(char*));
+    objectPathArray = malloc(100*sizeof(char*));
+    objectOutHArray = malloc(100*sizeof(char*));
+    objectOutCArray = malloc(100*sizeof(char*));
+    objectTextArray = malloc(100*sizeof(char*));
+    objectsNumber = form_data("objectList.txt",objectNameArray,objectPathArray,objectOutHArray,objectOutCArray,objectTextArray);
+    printf("formed!\n");
     Model modelArray[objectsNumber];
     for(int i = 0; i<objectsNumber;i++){
-        modelArray[i]=get_object_info(objectPathArray[i],objectNameArray[i]);
-        modelData(modelArray[i],objectPathArray[i],objectOutHArray[i],objectOutCArray[i]);
+        modelArray[i]=get_object_info(objectPathArray[i],objectNameArray[i],objectTextArray[i]);
+        printf("MATERIALS: %d\n",modelArray[i].materials);
+        modelData(modelArray[i],objectPathArray[i],objectOutHArray[i],objectOutCArray[i],objectTextArray[i]);
     }
- 
+
     //to_format(objectNameArray[0],".obj");
     //to_format(objectOutCArray)
     //printf("%s",objectNameArray[0]);
@@ -421,7 +420,7 @@ int main(int argc, char** argv)
     glutMouseFunc(mouse);
     glutSpecialFunc(TeclasEspeciais); 
     glutKeyboardFunc (NormalKeyHandler);
-    //glutTimerFunc(5, upAndDown_Helper,800);
+    glutTimerFunc(5, upAndDown_Helper,600);
     glutMainLoop();
     return 0;
 }
