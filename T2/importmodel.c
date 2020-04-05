@@ -7,7 +7,6 @@
 #include "importmodel.h"
 #include "our_strings.h"
 #include <unistd.h>
-
 Model model(char* name, int v, int p, int t , int n, int f){
     Model res;
     strcpy(res.name,name);
@@ -70,7 +69,7 @@ Model get_object_info(const char* modelpath, char* name){
     while(str_readline(fp,buffer)!=EOF){
         //printf("|%s|\n",str_ndup(buffer,2));
         const char* substr = str_ndup(buffer,2);
-
+        
         if(strcmp(substr,"v ")==0){
             p++;
         } else if(strcmp(substr,"vt")==0){
@@ -86,17 +85,24 @@ Model get_object_info(const char* modelpath, char* name){
     return model(name,v,p,vt,vn,f);
 }
 
-void extractOBJdata(const char* modelpath, float positions[][3], float texels[][2], float normals[][3], int faces[][9]){
+void extractOBJdata(const char* modelpath, float** positions, float** texels, float** normals, int** faces){
     FILE *fp;
     fp = fopen(modelpath,"r");
-    char buffer[1000];
+    char* buffer = malloc(10000 * sizeof(char));
     int p=0,vt=0,vn=0,f=0;
-    while(str_readline(fp,buffer)!=EOF){
-        //printf("|%s|\n",str_ndup(buffer,2));
-        const char* substr = str_ndup(buffer,2);
+    printf("READ_INIT\n");
+    int res = 0,com = 0;
+    while((com = str_readline(fp,buffer))!=EOF){
+        //printf("oper: %d %p",com,fp);
+        res++;
+        
 
+
+        const char* substr = str_ndup(buffer,2);
+        //printf("|%s| at line i = %d\n",substr,res);
+        
         if(strcmp(substr,"v ")==0){
-            char *l = (char *) malloc(strlen(buffer) + 1);
+            char *l = (char *) malloc((strlen(buffer) + 1)*sizeof(char));
             strcpy(l,buffer);
             strtok(l, " ");
             for(int i=0; i<3; i++)
@@ -105,7 +111,7 @@ void extractOBJdata(const char* modelpath, float positions[][3], float texels[][
             p++;
             free(l);
         } else if(strcmp(substr,"vt") == 0) {
-            char *l = (char *) malloc(strlen(buffer) + 1);
+            char *l = (char *) malloc((strlen(buffer) + 1)*sizeof(char));
             strcpy(l,buffer);                    
             strtok(l, " ");
             for(int i=0; i<2; i++)
@@ -114,7 +120,7 @@ void extractOBJdata(const char* modelpath, float positions[][3], float texels[][
             vt++;
             free(l);
         } else if(strcmp(substr,"vn") == 0) {
-            char *l = (char *) malloc(strlen(buffer) + 1);
+            char *l = (char *) malloc((strlen(buffer) + 1)*sizeof(char));
             strcpy(l,buffer);                    
             strtok(l, " ");
             for(int i=0; i<3; i++)
@@ -123,7 +129,7 @@ void extractOBJdata(const char* modelpath, float positions[][3], float texels[][
             vn++;
             free(l);
         } else if(strcmp(substr,"f ") == 0) {
-            char *l = (char *) malloc(strlen(buffer) + 1);
+            char *l = (char *) malloc((strlen(buffer) + 1)*sizeof(char));
             strcpy(l,buffer);                    
             strtok(l, " ");
             for(int i=0; i<12; i++)
@@ -132,7 +138,7 @@ void extractOBJdata(const char* modelpath, float positions[][3], float texels[][
             f++;
             free(l);
         }
-        ;
+        free(substr);
     }
     fclose(fp);
 }
@@ -174,7 +180,7 @@ void writeCvertices(const char* filename, Model a){
     fclose(fp);
 }
 
-void writeCpositions(const char *filename,Model a, int faces[][9], float positions[][3])
+void writeCpositions(const char *filename,Model a, int** faces, float** positions)
 {    
 
     FILE *fp;
@@ -195,7 +201,7 @@ void writeCpositions(const char *filename,Model a, int faces[][9], float positio
     fclose(fp);
 }
 
-void writeCtexels(const char* filename,Model a, int faces[][9], float texels[][2])
+void writeCtexels(const char* filename,Model a, int** faces, float** texels)
 {
     FILE *fp;
     fp = fopen(filename,"a");
@@ -215,7 +221,7 @@ void writeCtexels(const char* filename,Model a, int faces[][9], float texels[][2
     fclose(fp);
 }
 
-void writeCnormals(const char* filename,Model a, int faces[][9], float normals[][3])
+void writeCnormals(const char* filename,Model a, int** faces, float** normals)
 {
     FILE *fp;
     fp = fopen(filename,"a");
@@ -237,16 +243,37 @@ void writeCnormals(const char* filename,Model a, int faces[][9], float normals[]
     fprintf(fp,"};\n");
     fclose(fp);
 }
+float** float_init(int size, int default_size){
+    float **a = malloc(size*sizeof(float*));
 
+    for(int i = 0; i < size; i++)
+        a[i]=malloc(default_size*sizeof(float));
+    return a;
+}
+int** int_init(int size, int default_size){
+    int **a = malloc(size*sizeof(int*));
+
+    for(int i = 0; i < size; i++)
+        a[i]=malloc(default_size*sizeof(int));
+    return a;    
+}
 void modelData(Model a,const char* filepath,const char* header,const char* cont){
-    float positions[a.positions][3];    // XYZ
+    printf("%d %d %d %d %d\n;",a.faces,a.normals,a.positions,a.texels,a.vertices);
+    float** positions = float_init(a.positions,3);
+    float** texels = float_init(a.texels,2);
+    float** normals = float_init(a.normals,3);
+    int** faces = int_init(a.faces,9);
+    /*float positions[a.positions][3];    // XYZ
     float texels[a.texels][2];          // UV
     float normals[a.normals][3];        // XYZ
-    int faces[a.faces][9];              // PTN PTN PTN PTN
-    extractOBJdata(filepath, positions, texels, normals, faces);
+    int faces[a.faces][9];              // PTN PTN PTN PTN*/
+    printf("Going to read now, wish me luck!\n");
     
     if(access(header,R_OK)==-1)
         writeH(header,a);
+
+    extractOBJdata(filepath, positions, texels, normals, faces);
+    printf("Done reading!\n");
 
     if(access(cont,R_OK)==-1) {
         writeCvertices(cont,a);

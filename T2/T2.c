@@ -82,6 +82,7 @@ void init(void){
 // Função callback chamada para fazer o desenho
 void display(void)
 {
+    glPushMatrix();
 	//menu for lighting
 	if(light==ON){	
 		luzAmbiente[0]=0.2;
@@ -114,7 +115,6 @@ void display(void)
 		
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     //glPolygonMode(GL_FRONT, GL_FILL);
-    glPushMatrix();
     glRotatef(spin, 0, 1.0-sin(spin), 0); 
     glRotatef(tilt, 1-sin(tilt), 0, 0);
     glTranslatef(0,balloonY,0);
@@ -205,7 +205,8 @@ void EspecificaParametrosVisualizacao(void)
 void reshape(int w, int h)
 {
 	// Para previnir uma divisão por zero
-	if ( h == 0 ) h = 1;
+	if ( h == 0 ) 
+        h = 1;
 
 	// Especifica o tamanho da viewport
     glViewport(0, 0, w, h);
@@ -344,6 +345,7 @@ void TeclasEspeciais(int key, int x, int y)
        // glRotatef(+tilt, 1+sin(tilt), 0, 0);			//tilt down
        tiltDisplay(1);
     }
+
     glutPostRedisplay();
 
 }
@@ -365,7 +367,7 @@ void NormalKeyHandler (unsigned char key, int x, int y)
       	angle += 5;
       	EspecificaParametrosVisualizacao();
     }	
-    
+    printf("%f\n",spinSpeed);
 	glutPostRedisplay();
 }
 
@@ -397,7 +399,9 @@ int main(int argc, char** argv)
 
     Model modelArray[objectsNumber];
     for(int i = 0; i<objectsNumber;i++){
+        printf("Processing model data!\n");
         modelArray[i]=get_object_info(objectPathArray[i],objectNameArray[i]);
+        printf("Model set!\n");
         modelData(modelArray[i],objectPathArray[i],objectOutHArray[i],objectOutCArray[i]);
     }
  
