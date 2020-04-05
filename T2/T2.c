@@ -12,8 +12,11 @@
 #include "our_strings.c"
 #include "importmodel.h"
 #include "importmodel.c"
-#include "ballon.h"
-#include "ballon.c"
+
+#include "balloon.c"
+#include "balloon.h"
+#include "house.c"
+#include "house.h"
 
 #define NELEMS(x) (sizeof(x)/sizeof(x[0]))
 #define PI 3.14159
@@ -25,6 +28,7 @@ int representation = 1, shading = 0, light = 1, antialiasing = 0; //menu labels
 GLfloat luzAmbiente[4]={0.2,0.2,0.2,1.0}; 
 GLfloat posicaoLuz[4]={0.0, 50.0, 50.0, 1.0};
 GLfloat size = 20.0f, tilt = 3.0f, spin = 0.0, angle, fAspect;
+GLint delta = 301, balloonY = 0, balloonMov = 1;
 
 FILE *fp;
 const char** objectNameArray;
@@ -112,6 +116,9 @@ void display(void)
     //glPolygonMode(GL_FRONT, GL_FILL);
     glPushMatrix();
     glRotatef(spin, 0, 1.0-sin(spin), 0); 
+    glRotatef(tilt, 1-sin(tilt), 0, 0);
+    glTranslatef(0,balloonY,0);
+    andTheBalloonGoesAndUpAndDown_UpAndDown_UpAndDown();
     glColor3f(0.0f, 0.0f, 1.0f);
     
     //
@@ -119,16 +126,14 @@ void display(void)
         glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
     else
         glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
-    glBegin(GL_TRIANGLES); {
-        //int size = sizeof(ballonPositions);
-        //printf("%d\n",ballonVertices);
-        for(int i = 0; i < NELEMS(ballonPositions); i+=3){
-            glVertex3f(ballonPositions[i],ballonPositions[i+1],ballonPositions[i+2]);
-            //printf("(%f,%f,%f)\n",ballonPostitons[i],ballonPostitons[i+1],ballonPostitons[i+2]);
-        }
-    } glEnd();
+    
+    render_object_balloon();
+    glScalef(0.25, 0.25, 0.25);           
+    glPopMatrix();
 
-    glScalef(1.0, 1.0, 1.0);           
+    glPushMatrix();
+    glColor3f(0.0f, 1.0f, 0.0f);
+    render_object_house();
     glPopMatrix();
     glutSwapBuffers();
     // Define os parâmetros da luz de número 0
@@ -152,9 +157,34 @@ void spinDisplayAntiClockWise(void)
     glutPostRedisplay();
 }
 
+void tiltDisplay(int downUp){
+    if(downUp == 1){
+        tilt+=spinSpeed;
+        if(tilt > 360)
+            tilt-=360;
+        //tilt*=downUp;
+    } else if(downUp == -1){
+         tilt-=spinSpeed;
+        if(tilt < 0)
+            tilt+=360;
+        //tilt*=downUp;        
+    }
+    glutPostRedisplay();
+}
+
+void andTheBalloonGoesAndUpAndDown_UpAndDown_UpAndDown(){
+    balloonY+=balloonMov;
+    if(balloonY>=delta){
+        balloonMov = -1;
+    }else if(balloonY<=0){
+        balloonMov = 1;
+    }
+}
+
 // Função usada para especificar o volume de visualização
 void EspecificaParametrosVisualizacao(void)
 {
+    //printf("angleVision: %f",angle);
 	// Especifica sistema de coordenadas de projeção
 	glMatrixMode(GL_PROJECTION);
 	// Inicializa sistema de coordenadas de projeção
@@ -307,10 +337,12 @@ void TeclasEspeciais(int key, int x, int y)
         spinDisplayClockWise();
     }
     if(key == GLUT_KEY_UP) {
-       glRotatef(-tilt, 1-sin(tilt), 0, 0);			//tilt up
+       //glRotatef(-tilt, 1-sin(tilt), 0, 0);			//tilt up
+       tiltDisplay(-1);
     }
     if(key == GLUT_KEY_DOWN) {
-        glRotatef(+tilt, 1+sin(tilt), 0, 0);			//tilt down
+       // glRotatef(+tilt, 1+sin(tilt), 0, 0);			//tilt down
+       tiltDisplay(1);
     }
     glutPostRedisplay();
 
@@ -320,9 +352,9 @@ void TeclasEspeciais(int key, int x, int y)
 void NormalKeyHandler (unsigned char key, int x, int y)
 {
     if (key == 'z' && spinSpeed>0)//spins slower
-        spinSpeed-=0.02;
+        spinSpeed-=1;
     else if (key == 'a')		//spins faster
-        spinSpeed+=0.02;
+        spinSpeed+=1;
     else if(key == 27)
       	exit (0);	
     else if(key == 43){ // Zoom-in
@@ -337,9 +369,27 @@ void NormalKeyHandler (unsigned char key, int x, int y)
 	glutPostRedisplay();
 }
 
+void upAndDown_Helper(int i){
+    printf("Y: %d\n",balloonY);
+    if(balloonY>=delta-1){
+        printf("Time to wait!");
+        if(i<=0) {
+            balloonY-=2;
+            glutTimerFunc(5,upAndDown_Helper,800);
+        }
+        else {
+            printf("I: %d\n",i);
+            glutTimerFunc(5,upAndDown_Helper,--i);
+        }
+    } else {
+        andTheBalloonGoesAndUpAndDown_UpAndDown_UpAndDown();
+        glutPostRedisplay();
+        glutTimerFunc(5,upAndDown_Helper, i);
+    }
+}
 int main(int argc, char** argv)
 {
-    /*objectNameArray = malloc(1000*sizeof(char*));
+    objectNameArray = malloc(1000*sizeof(char*));
     objectPathArray = malloc(1000*sizeof(char*));
     objectOutHArray = malloc(1000*sizeof(char*));
     objectOutCArray = malloc(1000*sizeof(char*));
@@ -349,7 +399,7 @@ int main(int argc, char** argv)
     for(int i = 0; i<objectsNumber;i++){
         modelArray[i]=get_object_info(objectPathArray[i],objectNameArray[i]);
         modelData(modelArray[i],objectPathArray[i],objectOutHArray[i],objectOutCArray[i]);
-    }*/
+    }
  
     //to_format(objectNameArray[0],".obj");
     //to_format(objectOutCArray)
@@ -358,7 +408,7 @@ int main(int argc, char** argv)
     //our_strings.c importmodel.c Normalsballon.c
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-    glutInitWindowSize(500, 500);
+    glutInitWindowSize(900, 900);
     glutInitWindowPosition(100, 100);
     glutCreateWindow(argv[0]);
     init();
@@ -367,6 +417,7 @@ int main(int argc, char** argv)
     glutMouseFunc(mouse);
     glutSpecialFunc(TeclasEspeciais); 
     glutKeyboardFunc (NormalKeyHandler);
+    glutTimerFunc(5, upAndDown_Helper,800);
     glutMainLoop();
     return 0;
 }

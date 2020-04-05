@@ -18,6 +18,7 @@ Model model(char* name, int v, int p, int t , int n, int f){
     res.faces = f;
     return res;
 }
+
 Vertix vertix(float x, float y, float z){
     Vertix res;
     res.x=x;
@@ -25,7 +26,6 @@ Vertix vertix(float x, float y, float z){
     res.z=z;
     return res;
 }
-
 
 int register_objects(char* filename, const char** object_names){
     FILE *f;
@@ -158,7 +158,8 @@ void writeH(const char* filename, Model a)
     fprintf(fp,"const float %sPositions[%d];\n",a.name,a.vertices*3); 
     fprintf(fp,"const float %sTexels[%d];\n",a.name,a.vertices*2); 
     fprintf(fp,"const float %sNormals[%d];\n",a.name,a.vertices*3); 
-    
+    fprintf(fp,"void render_object_%s();\n",a.name);
+
     fclose(fp);
 }
 
@@ -252,5 +253,21 @@ void modelData(Model a,const char* filepath,const char* header,const char* cont)
         writeCpositions(cont,a,faces,positions);
         writeCtexels(cont,a,faces,texels);
         writeCnormals(cont,a,faces,normals);
+        render_object_c(a,cont);
     }
+}
+
+void render_object_c(Model a,const char* cont){
+    FILE *fp;
+    fp=fopen(cont,"a");
+    
+
+    fprintf(fp,"void render_object_%s() {\n\n",a.name);
+    fprintf(fp,"\tint size = (sizeof(%sPositions)/sizeof(%sPositions[0]));\n",a.name,a.name);
+    fprintf(fp,"\tglBegin(GL_TRIANGLES); {\n");
+    fprintf(fp,"\t\tfor(int i=0;i<size;i+=3){\n");
+    fprintf(fp,"\t\t\tglVertex3f(%sPositions[i],%sPositions[i+1],%sPositions[i+2]);\n\t\t}\n",a.name,a.name,a.name);
+    fprintf(fp,"\t}\tglEnd();\n}\n");
+
+    fclose(fp);
 }

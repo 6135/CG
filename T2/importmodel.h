@@ -1,5 +1,6 @@
 #ifndef importmodel_h
 #define importmodel_h
+#define NELEMS(x) (sizeof(x)/sizeof(x[0]))
 
 typedef struct{
     int vertices,positions,texels,normals,faces;
@@ -32,7 +33,6 @@ void writeCpositions(const char *filename, Model a, int faces[][9], float positi
 void writeCtexels(const char* filename,Model a, int faces[][9], float texels[][2]);
 void writeCnormals(const char* filename,Model a, int faces[][9], float normals[][3]);
 void modelData(Model a,const char* filepath,const char* header,const char* cont);
-
-
+void render_object_c(Model a,const char* cont);
 
 #endif
