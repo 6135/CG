@@ -3972,6 +3972,7 @@ void render_object_house() {
 	int size = (sizeof(housePositions)/sizeof(housePositions[0]));
 	glBegin(GL_TRIANGLES); {
 		for(int i=0;i<size;i+=3){
+			glNormal3f(houseNormals[i],houseNormals[i+1],houseNormals[i+2]);
 			glVertex3f(housePositions[i],housePositions[i+1],housePositions[i+2]);
 		}
 	}	glEnd();

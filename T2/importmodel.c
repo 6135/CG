@@ -170,7 +170,7 @@ void writeH(const char* filename, Model a)
 }
 
 void writeCvertices(const char* filename, Model a){
-    FILE *fp;printf("Im here");
+    FILE *fp;
     fp = fopen(filename,"a");
     
     fprintf(fp,"//%s %s\n","This is .c file for the model:",a.name);
@@ -258,7 +258,6 @@ int** int_init(int size, int default_size){
     return a;    
 }
 void modelData(Model a,const char* filepath,const char* header,const char* cont){
-    printf("%d %d %d %d %d\n;",a.faces,a.normals,a.positions,a.texels,a.vertices);
     float** positions = float_init(a.positions,3);
     float** texels = float_init(a.texels,2);
     float** normals = float_init(a.normals,3);
@@ -267,13 +266,11 @@ void modelData(Model a,const char* filepath,const char* header,const char* cont)
     float texels[a.texels][2];          // UV
     float normals[a.normals][3];        // XYZ
     int faces[a.faces][9];              // PTN PTN PTN PTN*/
-    printf("Going to read now, wish me luck!\n");
     
     if(access(header,R_OK)==-1)
         writeH(header,a);
 
     extractOBJdata(filepath, positions, texels, normals, faces);
-    printf("Done reading!\n");
 
     if(access(cont,R_OK)==-1) {
         writeCvertices(cont,a);
@@ -293,6 +290,7 @@ void render_object_c(Model a,const char* cont){
     fprintf(fp,"\tint size = (sizeof(%sPositions)/sizeof(%sPositions[0]));\n",a.name,a.name);
     fprintf(fp,"\tglBegin(GL_TRIANGLES); {\n");
     fprintf(fp,"\t\tfor(int i=0;i<size;i+=3){\n");
+    fprintf(fp,"\t\t\tglNormal3f(%sNormals[i],%sNormals[i+1],%sNormals[i+2]);\n\t\t}\n",a.name,a.name,a.name);
     fprintf(fp,"\t\t\tglVertex3f(%sPositions[i],%sPositions[i+1],%sPositions[i+2]);\n\t\t}\n",a.name,a.name,a.name);
     fprintf(fp,"\t}\tglEnd();\n}\n");
 
