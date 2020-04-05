@@ -179,7 +179,7 @@ void writeCpositions(const char *filename,Model a, int faces[][9], float positio
     FILE *fp;
     fp = fopen(filename,"a");
 
-    fprintf(fp,"const float %sPostitons[%d] = {\n",a.name,a.vertices*3);
+    fprintf(fp,"const float %sPositions[%d] = {\n",a.name,a.vertices*3);
     for(int i=0;i<a.faces;i++){
         int va = faces[i][0] -1;
         int vb = faces[i][3] -1;

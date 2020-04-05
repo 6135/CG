@@ -1,7 +1,7 @@
 //This is .c file for the model: ballon
 #include "ballon.h"
 const int ballonVertices = 1284;
-const float ballonPostitons[3852] = {
+const float ballonPositions[3852] = {
 0.071207, 0.136799, 5.733466,
 -1.528794, 1.736799, 5.733468,
 0.071207, 1.736799, 5.733468,

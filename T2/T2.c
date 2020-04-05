@@ -122,8 +122,8 @@ void display(void)
     glBegin(GL_TRIANGLES); {
         //int size = sizeof(ballonPositions);
         //printf("%d\n",ballonVertices);
-        for(int i = 0; i < NELEMS(ballonPostitons); i+=3){
-            glVertex3f(ballonPostitons[i],ballonPostitons[i+1],ballonPostitons[i+2]);
+        for(int i = 0; i < NELEMS(ballonPositions); i+=3){
+            glVertex3f(ballonPositions[i],ballonPositions[i+1],ballonPositions[i+2]);
             //printf("(%f,%f,%f)\n",ballonPostitons[i],ballonPostitons[i+1],ballonPostitons[i+2]);
         }
     } glEnd();
