@@ -387,10 +387,9 @@ void NormalKeyHandler (unsigned char key, int x, int y)
       	angle += 5;
       	EspecificaParametrosVisualizacao();
     }	
-    printf("%f\n",spinSpeed);
+    //printf("%f\n",spinSpeed);
 	glutPostRedisplay();
 }
-
 
 int main(int argc, char** argv)
 {

@@ -296,3 +296,15 @@ void render_object_c(Model a,const char* cont){
 
     fclose(fp);
 }
+
+void texture_render_c(Model a,const char* cont){
+    FILE *fp;
+    fp=fopen(cont,"a");
+    
+
+    fprintf(fp,"void texture_render_%s() {\n\n",a.name);
+    fprintf(fp,"\tint size = (sizeof(%sTextels)/sizeof(%sTextels[0]));\n",a.name,a.name);
+
+    fclose(fp);
+}
+
