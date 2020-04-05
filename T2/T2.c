@@ -39,6 +39,33 @@ int objects;
 //Model* objectsArray;
 int objectsNumber;
 
+void upAndDown_Helper(int i){
+    printf("Y: %d\n",balloonY);
+    if(balloonY>=delta-1){
+        printf("Time to wait!");
+        if(i<=0) {
+            balloonY-=2;
+            glutTimerFunc(5,upAndDown_Helper,800);
+        }
+        else {
+            printf("I: %d\n",i);
+            glutTimerFunc(5,upAndDown_Helper,--i);
+        }
+    } else {
+        andTheBalloonGoesAndUpAndDown_UpAndDown_UpAndDown();
+        glutPostRedisplay();
+        glutTimerFunc(5,upAndDown_Helper, i);
+    }
+}
+
+void andTheBalloonGoesAndUpAndDown_UpAndDown_UpAndDown(){
+    balloonY+=balloonMov;
+    if(balloonY>=delta){
+        balloonMov = -1;
+    }else if(balloonY<=0){
+        balloonMov = 1;
+    }
+}
 void init(void){	
 	// Ativa o uso da luz ambiente 
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, luzAmbiente);
@@ -118,7 +145,6 @@ void display(void)
     glRotatef(spin, 0, 1.0-sin(spin), 0); 
     glRotatef(tilt, 1-sin(tilt), 0, 0);
     glTranslatef(0,balloonY,0);
-    andTheBalloonGoesAndUpAndDown_UpAndDown_UpAndDown();
     glColor3f(0.0f, 0.0f, 1.0f);
     
     //
@@ -170,15 +196,6 @@ void tiltDisplay(int downUp){
         //tilt*=downUp;        
     }
     glutPostRedisplay();
-}
-
-void andTheBalloonGoesAndUpAndDown_UpAndDown_UpAndDown(){
-    balloonY+=balloonMov;
-    if(balloonY>=delta){
-        balloonMov = -1;
-    }else if(balloonY<=0){
-        balloonMov = 1;
-    }
 }
 
 // Função usada para especificar o volume de visualização
@@ -371,24 +388,6 @@ void NormalKeyHandler (unsigned char key, int x, int y)
 	glutPostRedisplay();
 }
 
-void upAndDown_Helper(int i){
-    //printf("Y: %d\n",balloonY);
-    if(balloonY>=delta-1){
-        //printf("Time to wait!");
-        if(i<=0) {
-            balloonY-=2;
-            glutTimerFunc(5,upAndDown_Helper,800);
-        }
-        else {
-            //printf("I: %d\n",i);
-            glutTimerFunc(5,upAndDown_Helper,--i);
-        }
-    } else {
-        andTheBalloonGoesAndUpAndDown_UpAndDown_UpAndDown();
-        glutPostRedisplay();
-        glutTimerFunc(5,upAndDown_Helper, i);
-    }
-}
 int main(int argc, char** argv)
 {
     objectNameArray = malloc(1000*sizeof(char*));
@@ -399,9 +398,7 @@ int main(int argc, char** argv)
 
     Model modelArray[objectsNumber];
     for(int i = 0; i<objectsNumber;i++){
-        //printf("Processing model data!\n");
         modelArray[i]=get_object_info(objectPathArray[i],objectNameArray[i]);
-        //printf("Model set!\n");
         modelData(modelArray[i],objectPathArray[i],objectOutHArray[i],objectOutCArray[i]);
     }
  
@@ -421,7 +418,7 @@ int main(int argc, char** argv)
     glutMouseFunc(mouse);
     glutSpecialFunc(TeclasEspeciais); 
     glutKeyboardFunc (NormalKeyHandler);
-    glutTimerFunc(5, upAndDown_Helper,800);
+    //glutTimerFunc(5, upAndDown_Helper,800);
     glutMainLoop();
     return 0;
 }
