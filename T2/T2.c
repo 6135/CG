@@ -10,11 +10,13 @@
 
 #include "our_strings.h"
 #include "our_strings.c"
+
 #include "importmodel.h"
 #include "importmodel.c"
 
-#include "balloon.c"
 #include "balloon.h"
+#include "balloon.c"
+
 #include "house.c"
 #include "house.h"
 
@@ -39,6 +41,15 @@ int objects;
 //Model* objectsArray;
 int objectsNumber;
 
+void andTheBalloonGoesAndUpAndDown_UpAndDown_UpAndDown(){
+    balloonY+=balloonMov;
+    if(balloonY>=delta){
+        balloonMov = -1;
+    }else if(balloonY<=0){
+        balloonMov = 1;
+    }
+}
+
 void upAndDown_Helper(int i){
     printf("Y: %d\n",balloonY);
     if(balloonY>=delta-1){
@@ -58,14 +69,6 @@ void upAndDown_Helper(int i){
     }
 }
 
-void andTheBalloonGoesAndUpAndDown_UpAndDown_UpAndDown(){
-    balloonY+=balloonMov;
-    if(balloonY>=delta){
-        balloonMov = -1;
-    }else if(balloonY<=0){
-        balloonMov = 1;
-    }
-}
 void init(void){	
 	// Ativa o uso da luz ambiente 
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, luzAmbiente);

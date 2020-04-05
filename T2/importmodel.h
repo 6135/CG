@@ -19,12 +19,12 @@ typedef struct{
 }ModelDatal;
 
 Vertix vertix(float x, float y, float z);
-Model model(char* name, int v, int p, int t , int n, int f);
+Model model(const char* name, int v, int p, int t , int n, int f);
 int register_objects(char* filename, const char** object_names);
 const char *to_format(const char *word, char *format);
 void all_to_format(const char**objs,int n, char*format);
 int form_data(char *filename,const char** objsn, const char **objs, const char **objsouth, const char** objsoutc);
-Model get_object_info(const char* modelpath, char* name);
+Model get_object_info(const char* modelpath,const char* name);
 void model_info_print(Model a);
 void extractOBJdata(const char* modelpath, float** positions, float** texels, float** normals, int** faces);
 void writeH(const char* filename, Model a);
