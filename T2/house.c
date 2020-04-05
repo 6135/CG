@@ -1,5 +1,6 @@
 //This is .c file for the model: house
 #include "house.h"
+
 const int houseVertices = 1320;
 const float housePositions[3960] = {
 159.781998, -461.124969, -134.756073,

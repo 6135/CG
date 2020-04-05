@@ -7,7 +7,7 @@
 #include "importmodel.h"
 #include "our_strings.h"
 #include <unistd.h>
-Model model(char* name, int v, int p, int t , int n, int f){
+Model model(const char* name, int v, int p, int t , int n, int f){
     Model res;
     strcpy(res.name,name);
     res.vertices = v;
@@ -61,7 +61,7 @@ void model_info_print(Model a){
     printf("ver: %d pos: %d tex: %d norm: %d f: %d",a.vertices,a.positions,a.texels,a.normals,a.faces);
 }
 
-Model get_object_info(const char* modelpath, char* name){
+Model get_object_info(const char* modelpath,const char* name){
     FILE *fp;
     fp = fopen(modelpath,"r");
     char buffer[1000];
@@ -98,7 +98,8 @@ void extractOBJdata(const char* modelpath, float** positions, float** texels, fl
         
 
 
-        const char* substr = str_ndup(buffer,2);
+        char substr[3];
+        strncpy(substr,buffer,2);
         //printf("|%s| at line i = %d\n",substr,res);
         
         if(strcmp(substr,"v ")==0){
@@ -138,7 +139,6 @@ void extractOBJdata(const char* modelpath, float** positions, float** texels, fl
             f++;
             free(l);
         }
-        free(substr);
     }
     fclose(fp);
 }

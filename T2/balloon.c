@@ -1,5 +1,6 @@
 //This is .c file for the model: balloon
 #include "balloon.h"
+
 const int balloonVertices = 5727;
 const float balloonPositions[17181] = {
 22.039499, 41.812199, 15.257000,
@@ -17191,12 +17192,13 @@ const float balloonNormals[17181] = {
 void render_object_balloon() {
 
 	int size = (sizeof(balloonPositions)/sizeof(balloonPositions[0]));
-    printf("display_init");
+    int texelsSize = (sizeof(balloonTexels)/sizeof(balloonTexels[0]));
 	glBegin(GL_TRIANGLES); {
-		for(int i=0;i<size;i+=3){
+		for(int i=0,j=0;i<size && j<texelsSize ;i+=3){
+            printf("Texture Pos: %f %f\n",balloonTexels[j],balloonTexels[j+1]);
             glNormal3f(balloonNormals[i],balloonNormals[i+1],balloonNormals[i+2]);
-            //printf("%f %f %f\n",balloonNormals[i],balloonNormals[i+1],balloonNormals[i+2]);
 			glVertex3f(balloonPositions[i],balloonPositions[i+1],balloonPositions[i+2]);
+            j+=2;
 		}
 	}	glEnd();
 }
