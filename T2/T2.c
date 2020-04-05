@@ -367,20 +367,20 @@ void NormalKeyHandler (unsigned char key, int x, int y)
       	angle += 5;
       	EspecificaParametrosVisualizacao();
     }	
-    printf("%f\n",spinSpeed);
+    //printf("%f\n",spinSpeed);
 	glutPostRedisplay();
 }
 
 void upAndDown_Helper(int i){
-    printf("Y: %d\n",balloonY);
+    //printf("Y: %d\n",balloonY);
     if(balloonY>=delta-1){
-        printf("Time to wait!");
+        //printf("Time to wait!");
         if(i<=0) {
             balloonY-=2;
             glutTimerFunc(5,upAndDown_Helper,800);
         }
         else {
-            printf("I: %d\n",i);
+            //printf("I: %d\n",i);
             glutTimerFunc(5,upAndDown_Helper,--i);
         }
     } else {
@@ -399,9 +399,9 @@ int main(int argc, char** argv)
 
     Model modelArray[objectsNumber];
     for(int i = 0; i<objectsNumber;i++){
-        printf("Processing model data!\n");
+        //printf("Processing model data!\n");
         modelArray[i]=get_object_info(objectPathArray[i],objectNameArray[i]);
-        printf("Model set!\n");
+        //printf("Model set!\n");
         modelData(modelArray[i],objectPathArray[i],objectOutHArray[i],objectOutCArray[i]);
     }
  
