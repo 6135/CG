@@ -117,6 +117,7 @@ void init(void){
 void display(void)
 {
     glPushMatrix();
+    
     gluLookAt(
 	camera[0],camera[1], camera[2],
 	0.0f, 0.0f, 0.0f,
