@@ -20,6 +20,9 @@
 #include "resources/balloon.h"
 #include "resources/balloon.c"
 
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
 #define NELEMS(x) (sizeof(x)/sizeof(x[0]))
 #define PI 3.14159
 #define ON 1

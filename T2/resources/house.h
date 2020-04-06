@@ -17,4 +17,8 @@ const int houseCounts[3];
 const float houseDiffuses[3][3];
 const float houseSpeculars[3][3];
 
+const char *images[3]={"window.jpg","brick.jpg","wood.png"};
+GLint width, height;
+
 void render_object_house();
+unsigned int texture_object_house(char *image);
