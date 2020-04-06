@@ -26,10 +26,10 @@
 #define OFF 0
 bool mouseDown = false;
 double spinSpeed = 3;
-int representation = 1, shading = 0, light = 0, antialiasing = 0; //menu labels
-GLfloat size = 20.0f, tilt = 3.0f, spin = 0.0, angle, fAspect;
+int representation = 1, shading = 0, light = 1, antialiasing = 0, hangtime = 500; //menu labels
+GLfloat size = 20.0f, tilt = 0.0f, spin = 0.0, angle, fAspect;
 GLint delta = 301, balloonY = 0, balloonMov = 1;
-GLfloat camera[] = {1.0f, 1.0f, 1.0f};
+GLfloat camera[] = {0.0f, 0.0f, 200.0f};
 
 FILE *fp;
 const char** objectNameArray;
@@ -40,7 +40,7 @@ const char** objectTextArray;
 int objects;
 //Model* objectsArray;
 int objectsNumber;
-
+GLfloat testY = 5;
 void andTheBalloonGoesAndUpAndDown_UpAndDown_UpAndDown(){
     balloonY+=balloonMov;
     if(balloonY>=delta-1){
@@ -52,14 +52,14 @@ void andTheBalloonGoesAndUpAndDown_UpAndDown_UpAndDown(){
 
 void upAndDown_Helper(int i){
     //printf("Y: %d\n",balloonY);
-    if(balloonY>=delta-1){
+    if(balloonY>=delta-1 || (balloonY==3 && balloonMov==-1)){
         //printf("Time to wait!");
-        if(i<=0) {
+        if(i<=0 ) {
             balloonY-=2;
-            glutTimerFunc(5,upAndDown_Helper,800);
+            glutTimerFunc(5,upAndDown_Helper,hangtime);
         }
         else {
-            //printf("I: %d\n",i);
+           // printf("I: %d\n",i);
             glutTimerFunc(5,upAndDown_Helper,--i);
         }
     } else {
@@ -117,13 +117,6 @@ void init(void){
 void display(void)
 {
     glPushMatrix();
-    
-    gluLookAt(
-	camera[0],camera[1], camera[2],
-	0.0f, 0.0f, 0.0f,
-	0.0f, 1.0f, 0.0f);
-
-    
     //menu for lighting
     if(light==ON){	
 		glEnable(GL_LIGHTING);
@@ -168,9 +161,9 @@ void display(void)
     render_object_balloon();
     glScalef(0.25, 0.25, 0.25);           
     glPopMatrix();
-    glPushMatrix();
+    //glPushMatrix();
     render_object_house();
-    glPopMatrix();
+    //glPopMatrix();
     glutSwapBuffers();
 	
 }
@@ -216,7 +209,7 @@ void EspecificaParametrosVisualizacao(void)
 	glLoadIdentity();
 
 	// Especifica a projeção perspectiva
-    gluPerspective(angle,fAspect,0.4,500);
+    gluPerspective(angle,fAspect,10,10000);
 
 	// Especifica sistema de coordenadas do modelo
 	glMatrixMode(GL_MODELVIEW);
@@ -224,7 +217,7 @@ void EspecificaParametrosVisualizacao(void)
 	glLoadIdentity();
 
 	// Especifica posição do observador e do alvo
-    gluLookAt(0,80,200, 0,0,0, 0,1,0);
+    gluLookAt(camera[0],camera[1],camera[2], 0,0,0, 0,1,0);
 }
 
 void reshape(int w, int h)
@@ -354,53 +347,51 @@ void mouse(int button, int state, int x, int y)
 // para teclas especiais, tais como F1, PgDn e Home
 void TeclasEspeciais(int key, int x, int y)
 {
-    if(key == GLUT_KEY_LEFT) {
-        //glutIdleFunc(spinDisplayAntiClockWise); //spins anti clockwise
+    if(key == GLUT_KEY_LEFT) 
         spinDisplayAntiClockWise();
-    }
-    if(key == GLUT_KEY_RIGHT) {
-        //glutIdleFunc(spinDisplayClockWise);   	//spins clockwise
+    else if(key == GLUT_KEY_RIGHT) 
         spinDisplayClockWise();
-    }
-    if(key == GLUT_KEY_UP) {
-       //glRotatef(-tilt, 1-sin(tilt), 0, 0);			//tilt up
+    else if(key == GLUT_KEY_UP) 
        tiltDisplay(-1);
-    }
-    if(key == GLUT_KEY_DOWN) {
-       // glRotatef(+tilt, 1+sin(tilt), 0, 0);			//tilt down
+    else if(key == GLUT_KEY_DOWN) 
        tiltDisplay(1);
-    }
-     if(key == GLUT_KEY_F1){
-    	camera[0]= 1.0f; 
-    	camera[1]= 1.0f;
+    else if(key == GLUT_KEY_F1){
+        angle=45;
+    	camera[0]= 1000.0f; 
+    	camera[1]= 0.0f;
+    	camera[2]= 0.0f;
+        EspecificaParametrosVisualizacao();
+    } else if(key == GLUT_KEY_F2){
+        angle=45;
+    	camera[0]= -1000.0f; 
+    	camera[1]= 0.0f;
+    	camera[2]= 0.0f;
+        EspecificaParametrosVisualizacao();
+    } else if(key == GLUT_KEY_F3){
+        angle=45;
+    	camera[0]= 0.0f; 
+    	camera[1]= 0.0f;
+    	camera[2]= 1500.0f;
+        EspecificaParametrosVisualizacao();
+    } else if(key == GLUT_KEY_F4){
+        angle=45;
+    	camera[0]= 0.0f; 
+    	camera[1]= 0.0f;
+    	camera[2]= -1500.0f;
+        EspecificaParametrosVisualizacao();
+    } else if(key == GLUT_KEY_F5){
+        angle=45;
+    	camera[0]= 0.0f; 
+    	camera[1]= -30.0f;
     	camera[2]= 1.0f;
+        EspecificaParametrosVisualizacao();
+    } else if(key == GLUT_KEY_F6){
+        angle=45;
+    	camera[0]= 0.0f; 
+    	camera[1]= 1000.0f;
+    	camera[2]= 1.0f;
+        EspecificaParametrosVisualizacao();
     }
-    if(key == GLUT_KEY_F2){
-    	camera[0]= 2.0f; 
-    	camera[1]= 2.0f;
-    	camera[2]= 2.0f;
-    }
-    if(key == GLUT_KEY_F3){
-    	camera[0]= 3.0f; 
-    	camera[1]= 3.0f;
-    	camera[2]= 3.0f;
-    }
-    if(key == GLUT_KEY_F4){
-    	camera[0]= -1.0f; 
-    	camera[1]= -1.0f;
-    	camera[2]= -1.0f;
-    }
-    if(key == GLUT_KEY_F5){
-    	camera[0]= -2.0f; 
-    	camera[1]= -2.0f;
-    	camera[2]= -2.0f;
-    }
-    if(key == GLUT_KEY_F6){
-    	camera[0]= -3.0f; 
-    	camera[1]= -3.0f;
-    	camera[2]= -3.0f;
-    }
-
     glutPostRedisplay();
 
 }
@@ -421,7 +412,10 @@ void NormalKeyHandler (unsigned char key, int x, int y)
     else if(key == 45){ //zoom out
       	angle += 5;
       	EspecificaParametrosVisualizacao();
-    }	
+    } else  if(key == 'p') {
+        camera[1]+=-5.0f;
+        EspecificaParametrosVisualizacao();
+    }
     //printf("%f\n",spinSpeed);
 	glutPostRedisplay();
 }
@@ -458,7 +452,7 @@ int main(int argc, char** argv)
     glutMouseFunc(mouse);
     glutSpecialFunc(TeclasEspeciais); 
     glutKeyboardFunc (NormalKeyHandler);
-    glutTimerFunc(5, upAndDown_Helper,600);
+    glutTimerFunc(5, upAndDown_Helper,hangtime);
     glutMainLoop();
     return 0;
 }
