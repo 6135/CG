@@ -1,11 +1,20 @@
 //This is header file for the model: balloon
-// Positions: 1032
-// vt's: 1827
-// Normals: 784
-// Faces: 1909
-// Vertices: 5727
+// Positions: 1051
+// vt's: 2312
+// Normals: 1151
+// Faces: 1927
+// Vertices: 5781
+
 const int balloonVertices;
-const float balloonPositions[17181];
-const float balloonTexels[11454];
-const float balloonNormals[17181];
+const float balloonPositions[17343];
+const float balloonTexels[11562];
+const float balloonNormals[17343];
+
+const int balloonMaterials;
+const int balloonFirsts[3];
+const int balloonCounts[3];
+
+const float balloonDiffuses[3][3];
+const float balloonSpeculars[3][3];
+
 void render_object_balloon();

@@ -3,7 +3,8 @@
         "importmodel.h": "c",
         "strings_p.h": "c",
         "stdio.h": "c",
-        "ballon.h": "c"
+        "ballon.h": "c",
+        "house.h": "c"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }
