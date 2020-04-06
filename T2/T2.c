@@ -14,11 +14,11 @@
 #include "importmodel.h"
 #include "importmodel.c"
 
-#include "balloon.h"
-#include "balloon.c"
+#include "resources/balloon.h"
+#include "resources/balloon.c"
 
-#include "house.c"
-#include "house.h"
+#include "resources/house.c"
+#include "resources/house.h"
 
 #define NELEMS(x) (sizeof(x)/sizeof(x[0]))
 #define PI 3.14159
@@ -26,11 +26,10 @@
 #define OFF 0
 bool mouseDown = false;
 double spinSpeed = 3;
-int representation = 1, shading = 0, light = 1, antialiasing = 0; //menu labels
-GLfloat luzAmbiente[4]={0.2,0.2,0.2,1.0}; 
-GLfloat posicaoLuz[4]={0.0, 50.0, 50.0, 1.0};
+int representation = 1, shading = 0, light = 0, antialiasing = 0; //menu labels
 GLfloat size = 20.0f, tilt = 3.0f, spin = 0.0, angle, fAspect;
 GLint delta = 301, balloonY = 0, balloonMov = 1;
+GLfloat camera[] = {1.0f, 1.0f, 1.0f};
 
 FILE *fp;
 const char** objectNameArray;
@@ -69,12 +68,16 @@ void upAndDown_Helper(int i){
     }
 }
 
-void init(void){	
-	// Ativa o uso da luz ambiente 
-	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, luzAmbiente);
-	// Define os parâmetros da luz de número 0
-	glLightfv(GL_LIGHT0, GL_AMBIENT, luzAmbiente); 
-	glLightfv(GL_LIGHT0, GL_POSITION, posicaoLuz );	
+void init(void){
+    GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+    GLfloat mat_shininess[] = { 50.0 };
+    GLfloat light_position[] = { 1.0, 1.0, 1.0, 0.0 };
+
+	glClearColor (0.0, 0.0, 0.0, 0.0);
+    glShadeModel (GL_SMOOTH);
+
+
+    glLightfv(GL_LIGHT0, GL_POSITION, light_position);	
 
 	// Capacidade de brilho do material
 	GLfloat especularidade[4]={1.0,1.0,1.0,1.0}; 
@@ -113,16 +116,22 @@ void init(void){
 void display(void)
 {
     glPushMatrix();
-	//menu for lighting
-	if(light==ON){	
-		luzAmbiente[0]=0.2;
-		luzAmbiente[1]=0.2;
-		luzAmbiente[2]=0.2;
-		luzAmbiente[3]=1.0;
+    gluLookAt(
+	camera[0],camera[1], camera[2],
+	0.0f, 0.0f, 0.0f,
+	0.0f, 1.0f, 0.0f);
+
+    
+    //menu for lighting
+    if(light==ON){	
+		glEnable(GL_LIGHTING);
+	   	glEnable(GL_LIGHT0);
+	   	glEnable(GL_DEPTH_TEST);
 	}
 	else{
-		for (int i = 0; i < 4; ++i)
-			luzAmbiente[i]=0;
+		glDisable(GL_LIGHTING);
+	   	glDisable(GL_LIGHT0);
+	   	glDisable(GL_DEPTH_TEST);
 	}
 
 	//menu for shading
@@ -165,8 +174,6 @@ void display(void)
     render_object_house();
     glPopMatrix();
     glutSwapBuffers();
-    // Define os parâmetros da luz de número 0
-	glLightfv(GL_LIGHT0, GL_AMBIENT, luzAmbiente); 
 	
 }
 
@@ -313,8 +320,8 @@ void CriaMenu()
  
 
     iluminacaoMenu = glutCreateMenu(MenuIluminacao);
-    glutAddMenuEntry("On",0);
-    glutAddMenuEntry("Off",1);
+    glutAddMenuEntry("On",1);
+    glutAddMenuEntry("Off",0);
 
     shadingMenu = glutCreateMenu(MenuShading);
     glutAddMenuEntry("On",0);
@@ -364,6 +371,36 @@ void TeclasEspeciais(int key, int x, int y)
     if(key == GLUT_KEY_DOWN) {
        // glRotatef(+tilt, 1+sin(tilt), 0, 0);			//tilt down
        tiltDisplay(1);
+    }
+     if(key == GLUT_KEY_F1){
+    	camera[0]= 1.0f; 
+    	camera[1]= 1.0f;
+    	camera[2]= 1.0f;
+    }
+    if(key == GLUT_KEY_F2){
+    	camera[0]= 2.0f; 
+    	camera[1]= 2.0f;
+    	camera[2]= 2.0f;
+    }
+    if(key == GLUT_KEY_F3){
+    	camera[0]= 3.0f; 
+    	camera[1]= 3.0f;
+    	camera[2]= 3.0f;
+    }
+    if(key == GLUT_KEY_F4){
+    	camera[0]= -1.0f; 
+    	camera[1]= -1.0f;
+    	camera[2]= -1.0f;
+    }
+    if(key == GLUT_KEY_F5){
+    	camera[0]= -2.0f; 
+    	camera[1]= -2.0f;
+    	camera[2]= -2.0f;
+    }
+    if(key == GLUT_KEY_F6){
+    	camera[0]= -3.0f; 
+    	camera[1]= -3.0f;
+    	camera[2]= -3.0f;
     }
 
     glutPostRedisplay();
