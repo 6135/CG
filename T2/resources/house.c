@@ -3978,37 +3978,19 @@ const int houseCounts[3] = {
 30,
 90,
 };
-
-unsigned int texture_object_house(char *image){
-	unsigned int texture;
-    int n;
-    unsigned char *dados = stbi_load(image, &width, &height, &n, 0);
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, dados);
-    gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB, width, height, GL_RGB, GL_UNSIGNED_BYTE, dados);
-    stbi_image_free(dados);
-	return texture;
-}
-
 void render_object_house() {
-	glEnable(GL_TEXTURE_2D);
+
 	int size = (sizeof(housePositions)/sizeof(housePositions[0]));
 	glBegin(GL_TRIANGLES); {
-		for(int i=0,j=0;i<size && j<2640;i+=3,j+=2){
+		for(int i=0;i<size;i+=3){
 			if(i<3600)
-				texture_object_house(images[0]);
+				glColor3f(0.6f,0.36f,0.0f);
 			else if(i<3690)
 				glColor3f(0.0f,0.8f,1.0f);
 			else if(i<3960)
 				glColor3f(1.0f,1.0f,1.0f);
 			glNormal3f(houseNormals[i],houseNormals[i+1],houseNormals[i+2]);
 			glVertex3f(housePositions[i],housePositions[i+1],housePositions[i+2]);
-			glTexCoord2d(houseTexels[j],houseTexels[j+1]);
 		}
 	}	glEnd();
 }
