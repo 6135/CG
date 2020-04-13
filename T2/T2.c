@@ -138,12 +138,12 @@ void display(void)
 	//menu for antialiasing
 	if (antialiasing==ON){
 		glEnable(GL_BLEND);
-		glDisable(GL_DEPTH_TEST);
+		//glDisable(GL_DEPTH_TEST);
 		glEnable(GLUT_MULTISAMPLE);
 	}
 	else{
 		glDisable(GL_BLEND);
-		glEnable(GL_DEPTH_TEST);
+		//glEnable(GL_DEPTH_TEST);
 		glDisable(GLUT_MULTISAMPLE);
 	}
 		
