@@ -1,0 +1,7 @@
+add_executable(p1 p1.cpp)
+target_link_libraries(p1
+    LINK_PUBLIC
+        glfw
+        glad
+        ${CMAKE_DL_LIBS}
+)
