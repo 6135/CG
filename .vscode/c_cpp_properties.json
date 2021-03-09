@@ -1,9 +1,11 @@
 {
     "configurations": [
         {
-            "name": "Win32",
+            "name": "OpenGL",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/glad/include/glad",
+                "${workspaceFolder}/glfw/include/GLFW",
+                "${vcpkgRoot}/x86-windows/include"
             ],
             "defines": [
                 "_DEBUG",
@@ -11,10 +13,10 @@
                 "_UNICODE"
             ],
             "windowsSdkVersion": "10.0.18362.0",
-            "compilerPath": "C:/Program Files (x86)/Microsoft Visual Studio/2019/BuildTools/VC/Tools/MSVC/14.25.28610/bin/Hostx64/x64/cl.exe",
-            "cStandard": "c11",
+            "compilerPath": "C:/Program Files/mingw-w64/x86_64-8.1.0-posix-seh-rt_v6-rev0/mingw64/bin/g++.exe",
+            "cStandard": "c17",
             "cppStandard": "c++17",
-            "intelliSenseMode": "msvc-x64"
+            "intelliSenseMode": "gcc-x64"
         }
     ],
     "version": 4
