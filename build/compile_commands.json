@@ -435,8 +435,8 @@
   "file": "C:/Users/Gui/Documents/GitHub/CG/external/glad/src/glad.c"
 },
 {
-  "directory": "C:/Users/Gui/Documents/GitHub/CG/build/p1",
-  "command": "C:\\PROGRA~1\\MINGW-~1\\X86_64~1.0-P\\mingw64\\bin\\G__~1.EXE  @CMakeFiles/p1.dir/includes_CXX.rsp -g -std=gnu++11 -o CMakeFiles\\p1.dir\\p1.cpp.obj -c C:\\Users\\Gui\\Documents\\GitHub\\CG\\p1\\p1.cpp",
-  "file": "C:/Users/Gui/Documents/GitHub/CG/p1/p1.cpp"
+  "directory": "C:/Users/Gui/Documents/GitHub/CG/build/P1",
+  "command": "C:\\PROGRA~1\\MINGW-~1\\X86_64~1.0-P\\mingw64\\bin\\G__~1.EXE  @CMakeFiles/P1.dir/includes_CXX.rsp -g -std=gnu++11 -o CMakeFiles\\P1.dir\\main.cpp.obj -c C:\\Users\\Gui\\Documents\\GitHub\\CG\\P1\\main.cpp",
+  "file": "C:/Users/Gui/Documents/GitHub/CG/P1/main.cpp"
 }
 ]

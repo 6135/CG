@@ -68,7 +68,7 @@
 					"source" : "external/glfw-3.3.3/src",
 					"targetIndexes" : 
 					[
-						8
+						9
 					]
 				},
 				{
@@ -82,10 +82,10 @@
 					"source" : "external/glfw-3.3.3/examples",
 					"targetIndexes" : 
 					[
-						0,
-						6,
-						10,
-						17,
+						1,
+						7,
+						11,
+						18,
 						20,
 						22,
 						23,
@@ -104,19 +104,19 @@
 					"source" : "external/glfw-3.3.3/tests",
 					"targetIndexes" : 
 					[
-						1,
 						2,
 						3,
 						4,
 						5,
-						9,
-						11,
+						6,
+						10,
 						12,
 						13,
 						14,
 						15,
 						16,
-						18,
+						17,
+						19,
 						21,
 						25,
 						26,
@@ -137,21 +137,21 @@
 					"source" : "external/glad",
 					"targetIndexes" : 
 					[
-						7
+						8
 					]
 				},
 				{
-					"build" : "p1",
+					"build" : "P1",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.20"
 					},
 					"parentIndex" : 0,
 					"projectIndex" : 0,
-					"source" : "p1",
+					"source" : "P1",
 					"targetIndexes" : 
 					[
-						19
+						0
 					]
 				}
 			],
@@ -173,8 +173,8 @@
 					"name" : "CG",
 					"targetIndexes" : 
 					[
-						7,
-						19
+						0,
+						8
 					]
 				},
 				{
@@ -189,14 +189,13 @@
 					"parentIndex" : 0,
 					"targetIndexes" : 
 					[
-						0,
 						1,
 						2,
 						3,
 						4,
 						5,
 						6,
-						8,
+						7,
 						9,
 						10,
 						11,
@@ -207,6 +206,7 @@
 						16,
 						17,
 						18,
+						19,
 						20,
 						21,
 						22,
@@ -225,6 +225,13 @@
 			],
 			"targets" : 
 			[
+				{
+					"directoryIndex" : 7,
+					"id" : "P1::@5896a431b470e524a515",
+					"jsonFile" : "target-P1-Debug-de12fc49759e60447d50.json",
+					"name" : "P1",
+					"projectIndex" : 0
+				},
 				{
 					"directoryIndex" : 4,
 					"id" : "boing::@2c9db4894d051cedc98b",
@@ -357,13 +364,6 @@
 					"jsonFile" : "target-opacity-Debug-83e06a259a430e214d59.json",
 					"name" : "opacity",
 					"projectIndex" : 1
-				},
-				{
-					"directoryIndex" : 7,
-					"id" : "p1::@e90474a529c5519ec06e",
-					"jsonFile" : "target-p1-Debug-4675c9ec3bfee0cf1a99.json",
-					"name" : "p1",
-					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 4,

@@ -1,5 +1,5 @@
-add_executable(p1 p1.cpp)
-target_link_libraries(p1
+add_executable(P1 main.cpp)
+target_link_libraries(P1
     LINK_PUBLIC
         glfw
         glad

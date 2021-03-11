@@ -1,5 +1,5 @@
-p1/CMakeFiles/p1.dir/p1.cpp.obj: \
- C:\Users\Gui\Documents\GitHub\CG\p1\p1.cpp \
+P1/CMakeFiles/P1.dir/main.cpp.obj: \
+ C:\Users\Gui\Documents\GitHub\CG\P1\main.cpp \
  C:/Users/Gui/Documents/GitHub/CG/external/glad/include/glad/glad.h \
  C:/Users/Gui/Documents/GitHub/CG/external/glad/include/KHR/khrplatform.h \
  C:/PROGRA~1/MINGW-~1/X86_64~1.0-P/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/stdint.h \

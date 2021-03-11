@@ -2,10 +2,10 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "p1/p1.exe"
+			"path" : "P1/P1.exe"
 		},
 		{
-			"path" : "p1/p1.pdb"
+			"path" : "P1/P1.pdb"
 		}
 	],
 	"backtrace" : 1,
@@ -19,7 +19,7 @@
 		],
 		"files" : 
 		[
-			"p1/CMakeLists.txt",
+			"P1/CMakeLists.txt",
 			"CMakeLists.txt"
 		],
 		"nodes" : 
@@ -103,7 +103,7 @@
 			"id" : "glad::@55512df44c152ef9a2ca"
 		}
 	],
-	"id" : "p1::@e90474a529c5519ec06e",
+	"id" : "P1::@5896a431b470e524a515",
 	"link" : 
 	{
 		"commandFragments" : 
@@ -133,12 +133,12 @@
 		],
 		"language" : "CXX"
 	},
-	"name" : "p1",
-	"nameOnDisk" : "p1.exe",
+	"name" : "P1",
+	"nameOnDisk" : "P1.exe",
 	"paths" : 
 	{
-		"build" : "p1",
-		"source" : "p1"
+		"build" : "P1",
+		"source" : "P1"
 	},
 	"sourceGroups" : 
 	[
@@ -155,7 +155,7 @@
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "p1/p1.cpp",
+			"path" : "P1/main.cpp",
 			"sourceGroupIndex" : 0
 		}
 	],

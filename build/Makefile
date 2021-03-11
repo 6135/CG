@@ -577,17 +577,17 @@ glad/fast:
 .PHONY : glad/fast
 
 #=============================================================================
-# Target rules for targets named p1
+# Target rules for targets named P1
 
 # Build rule for target.
-p1: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 p1
-.PHONY : p1
+P1: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 P1
+.PHONY : P1
 
 # fast build rule for target.
-p1/fast:
-	$(MAKE) $(MAKESILENT) -f p1\CMakeFiles\p1.dir\build.make p1/CMakeFiles/p1.dir/build
-.PHONY : p1/fast
+P1/fast:
+	$(MAKE) $(MAKESILENT) -f P1\CMakeFiles\P1.dir\build.make P1/CMakeFiles/P1.dir/build
+.PHONY : P1/fast
 
 # Help Target
 help:
@@ -602,6 +602,7 @@ help:
 	@echo ... list_install_components
 	@echo ... rebuild_cache
 	@echo ... uninstall
+	@echo ... P1
 	@echo ... boing
 	@echo ... clipboard
 	@echo ... cursor
@@ -621,7 +622,6 @@ help:
 	@echo ... msaa
 	@echo ... offscreen
 	@echo ... opacity
-	@echo ... p1
 	@echo ... particles
 	@echo ... reopen
 	@echo ... sharing

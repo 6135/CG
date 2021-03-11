@@ -72,10 +72,10 @@ C:/Users/Gui/Documents/GitHub/CG/build/external/glad/CMakeFiles/edit_cache.dir
 C:/Users/Gui/Documents/GitHub/CG/build/external/glad/CMakeFiles/rebuild_cache.dir
 C:/Users/Gui/Documents/GitHub/CG/build/external/glad/CMakeFiles/list_install_components.dir
 C:/Users/Gui/Documents/GitHub/CG/build/external/glad/CMakeFiles/install/strip.dir
-C:/Users/Gui/Documents/GitHub/CG/build/p1/CMakeFiles/p1.dir
-C:/Users/Gui/Documents/GitHub/CG/build/p1/CMakeFiles/install/local.dir
-C:/Users/Gui/Documents/GitHub/CG/build/p1/CMakeFiles/install.dir
-C:/Users/Gui/Documents/GitHub/CG/build/p1/CMakeFiles/edit_cache.dir
-C:/Users/Gui/Documents/GitHub/CG/build/p1/CMakeFiles/rebuild_cache.dir
-C:/Users/Gui/Documents/GitHub/CG/build/p1/CMakeFiles/list_install_components.dir
-C:/Users/Gui/Documents/GitHub/CG/build/p1/CMakeFiles/install/strip.dir
+C:/Users/Gui/Documents/GitHub/CG/build/P1/CMakeFiles/P1.dir
+C:/Users/Gui/Documents/GitHub/CG/build/P1/CMakeFiles/install/local.dir
+C:/Users/Gui/Documents/GitHub/CG/build/P1/CMakeFiles/install.dir
+C:/Users/Gui/Documents/GitHub/CG/build/P1/CMakeFiles/edit_cache.dir
+C:/Users/Gui/Documents/GitHub/CG/build/P1/CMakeFiles/rebuild_cache.dir
+C:/Users/Gui/Documents/GitHub/CG/build/P1/CMakeFiles/list_install_components.dir
+C:/Users/Gui/Documents/GitHub/CG/build/P1/CMakeFiles/install/strip.dir

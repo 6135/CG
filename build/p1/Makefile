@@ -131,14 +131,14 @@ install/strip/fast: preinstall/fast
 
 # The main all target
 all: cmake_check_build_system
-	cd /d C:\Users\Gui\Documents\GitHub\CG\build && $(CMAKE_COMMAND) -E cmake_progress_start C:\Users\Gui\Documents\GitHub\CG\build\CMakeFiles C:\Users\Gui\Documents\GitHub\CG\build\p1\\CMakeFiles\progress.marks
-	cd /d C:\Users\Gui\Documents\GitHub\CG\build && $(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 p1/all
+	cd /d C:\Users\Gui\Documents\GitHub\CG\build && $(CMAKE_COMMAND) -E cmake_progress_start C:\Users\Gui\Documents\GitHub\CG\build\CMakeFiles C:\Users\Gui\Documents\GitHub\CG\build\P1\\CMakeFiles\progress.marks
+	cd /d C:\Users\Gui\Documents\GitHub\CG\build && $(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 P1/all
 	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\Gui\Documents\GitHub\CG\build\CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /d C:\Users\Gui\Documents\GitHub\CG\build && $(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 p1/clean
+	cd /d C:\Users\Gui\Documents\GitHub\CG\build && $(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 P1/clean
 .PHONY : clean
 
 # The main clean target
@@ -147,12 +147,12 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /d C:\Users\Gui\Documents\GitHub\CG\build && $(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 p1/preinstall
+	cd /d C:\Users\Gui\Documents\GitHub\CG\build && $(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 P1/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /d C:\Users\Gui\Documents\GitHub\CG\build && $(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 p1/preinstall
+	cd /d C:\Users\Gui\Documents\GitHub\CG\build && $(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 P1/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
@@ -161,42 +161,42 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
-p1/CMakeFiles/p1.dir/rule:
-	cd /d C:\Users\Gui\Documents\GitHub\CG\build && $(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 p1/CMakeFiles/p1.dir/rule
-.PHONY : p1/CMakeFiles/p1.dir/rule
+P1/CMakeFiles/P1.dir/rule:
+	cd /d C:\Users\Gui\Documents\GitHub\CG\build && $(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 P1/CMakeFiles/P1.dir/rule
+.PHONY : P1/CMakeFiles/P1.dir/rule
 
 # Convenience name for target.
-p1: p1/CMakeFiles/p1.dir/rule
-.PHONY : p1
+P1: P1/CMakeFiles/P1.dir/rule
+.PHONY : P1
 
 # fast build rule for target.
-p1/fast:
-	cd /d C:\Users\Gui\Documents\GitHub\CG\build && $(MAKE) $(MAKESILENT) -f p1\CMakeFiles\p1.dir\build.make p1/CMakeFiles/p1.dir/build
-.PHONY : p1/fast
+P1/fast:
+	cd /d C:\Users\Gui\Documents\GitHub\CG\build && $(MAKE) $(MAKESILENT) -f P1\CMakeFiles\P1.dir\build.make P1/CMakeFiles/P1.dir/build
+.PHONY : P1/fast
 
-p1.obj: p1.cpp.obj
-.PHONY : p1.obj
+main.obj: main.cpp.obj
+.PHONY : main.obj
 
 # target to build an object file
-p1.cpp.obj:
-	cd /d C:\Users\Gui\Documents\GitHub\CG\build && $(MAKE) $(MAKESILENT) -f p1\CMakeFiles\p1.dir\build.make p1/CMakeFiles/p1.dir/p1.cpp.obj
-.PHONY : p1.cpp.obj
+main.cpp.obj:
+	cd /d C:\Users\Gui\Documents\GitHub\CG\build && $(MAKE) $(MAKESILENT) -f P1\CMakeFiles\P1.dir\build.make P1/CMakeFiles/P1.dir/main.cpp.obj
+.PHONY : main.cpp.obj
 
-p1.i: p1.cpp.i
-.PHONY : p1.i
+main.i: main.cpp.i
+.PHONY : main.i
 
 # target to preprocess a source file
-p1.cpp.i:
-	cd /d C:\Users\Gui\Documents\GitHub\CG\build && $(MAKE) $(MAKESILENT) -f p1\CMakeFiles\p1.dir\build.make p1/CMakeFiles/p1.dir/p1.cpp.i
-.PHONY : p1.cpp.i
+main.cpp.i:
+	cd /d C:\Users\Gui\Documents\GitHub\CG\build && $(MAKE) $(MAKESILENT) -f P1\CMakeFiles\P1.dir\build.make P1/CMakeFiles/P1.dir/main.cpp.i
+.PHONY : main.cpp.i
 
-p1.s: p1.cpp.s
-.PHONY : p1.s
+main.s: main.cpp.s
+.PHONY : main.s
 
 # target to generate assembly for a file
-p1.cpp.s:
-	cd /d C:\Users\Gui\Documents\GitHub\CG\build && $(MAKE) $(MAKESILENT) -f p1\CMakeFiles\p1.dir\build.make p1/CMakeFiles/p1.dir/p1.cpp.s
-.PHONY : p1.cpp.s
+main.cpp.s:
+	cd /d C:\Users\Gui\Documents\GitHub\CG\build && $(MAKE) $(MAKESILENT) -f P1\CMakeFiles\P1.dir\build.make P1/CMakeFiles/P1.dir/main.cpp.s
+.PHONY : main.cpp.s
 
 # Help Target
 help:
@@ -210,10 +210,10 @@ help:
 	@echo ... install/strip
 	@echo ... list_install_components
 	@echo ... rebuild_cache
-	@echo ... p1
-	@echo ... p1.obj
-	@echo ... p1.i
-	@echo ... p1.s
+	@echo ... P1
+	@echo ... main.obj
+	@echo ... main.i
+	@echo ... main.s
 .PHONY : help
 
 

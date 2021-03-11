@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/Gui/Documents/GitHub/CG/p1
+# Install script for directory: C:/Users/Gui/Documents/GitHub/CG/P1
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
