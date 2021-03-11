@@ -10,9 +10,9 @@ void processInput(GLFWwindow *window);
 // settings
 const unsigned int SCR_WIDTH = 400;
 const unsigned int SCR_HEIGHT = 400;
-GLfloat red = 0.1f;
-GLfloat green = 0.1f;
-GLfloat blue = 0.1f;
+GLfloat red = 0.2f;
+GLfloat green = 0.2f;
+GLfloat blue = 0.2f;
 GLfloat alpha = 1.0f;
 int main()
 {
