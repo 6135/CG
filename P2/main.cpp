@@ -1,11 +1,12 @@
 #include<glad/glad.h>
 #include<GLFW/glfw3.h>
 #include <iostream>
+#include <math.h>
 #define TITLE "Janela Temporizada"
 #define MAX_TIME_SECONDS 30
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void processInput(GLFWwindow *window);
+void processInput();
 // declare and define vshader, position 4 in vector declaration
 // is for "w" = perspective division 
 const char *vertexShaderSource = "#version 330 core\n"
@@ -18,9 +19,10 @@ const char *vertexShaderSource = "#version 330 core\n"
 // are RGBA from [0,1] and where A = alpha (opacity)
 const char *fragmentShaderSource = "#version 330 core\n"
     "out vec4 FragColor;\n"
+    "uniform vec4 ourColor;\n"
     "void main()\n"
     "{\n"
-    "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+    "   FragColor = ourColor;\n"
     "}\n\0";
 // settings
 const unsigned int SCR_WIDTH = 400;
@@ -33,6 +35,7 @@ float vertices[] = {
     -0.5f, -0.5f, 0.0f, // left  
      0.5f, -0.5f, 0.0f, // right 
      0.5f,  0.5f, 0.0f,  // top
+     
     -0.5f, -0.5f, 0.0f, // left  
      0.5f,  0.5f, 0.0f, // right 
     -0.5f,  0.5f, 0.0f  // top    
@@ -42,6 +45,8 @@ float vertices[] = {
 unsigned int VBO, VAO;
 unsigned int shaderProgram, vertexShader,fragmentShader;
 GLFWwindow* window;
+
+
 void vertex_data_init(){
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
@@ -116,6 +121,7 @@ void shader_setup(){
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
 }
+
 int glfw_create_window(){
     window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, TITLE, NULL,NULL);
 
@@ -165,15 +171,24 @@ int main()
     {
         // render
         // ------
+        processInput();
+
         //glClearColor(0.5f, 0.5f, 0.5f, 1.0f); //grey rendering
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);   //green? rendering
         glClear(GL_COLOR_BUFFER_BIT);
 
         // draw our first triangle: using shader program
         glUseProgram(shaderProgram);
+        
+        float time_value = glfwGetTime();
+        float green_value = sin(time_value) / 2.0f + 0.5f;
+        int vertex_color_location = glGetUniformLocation(shaderProgram,"ourColor");
+        glUniform4f(vertex_color_location,0.0f,green_value,0.0f,1.0f);
+
         glBindVertexArray(VAO);
         // seeing as we only have a single VAO there's no need to bind
         // it every time, but we'll do so to keep things a bit more organized
+
         glDrawArrays(GL_TRIANGLES, 0, 6);
         // glBindVertexArray(0); // no need to unbind it every time 
         
@@ -208,19 +223,19 @@ void glSetClearColor(GLfloat r, GLfloat g, GLfloat b,GLfloat a){
 this frame and react accordingly 
 -----------------------------------------------------------------------*/
 
-void processInput(GLFWwindow *window)
+void processInput()
 {
-  if(glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS)
-    glfwSetWindowShouldClose(window, true);
-  if(glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) {
-    glSetClearColor(1.0f,0.0f,0.0f,1.0f);
-  }
-  if(glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS){
-    glSetClearColor(0.0f,1.0f,0.0f,1.0f);
-  }
-  if(glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS){
-      glSetClearColor(0.0f,0.0f,1.0f,1.0f);
-  }
+    if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
+//   if(glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) {
+//     glSetClearColor(1.0f,0.0f,0.0f,1.0f);
+//   }
+//   if(glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS){
+//     glSetClearColor(0.0f,1.0f,0.0f,1.0f);
+//   }
+//   if(glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS){
+//       glSetClearColor(0.0f,0.0f,1.0f,1.0f);
+//   }
 }
 
 /* glfw: whenever the window size changed (by OS or user resize) this
