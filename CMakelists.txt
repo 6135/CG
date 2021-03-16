@@ -28,4 +28,5 @@ set(ALL_LIBS
     glad    
 )
 
-add_subdirectory(p1)
+add_subdirectory(P1)
+add_subdirectory(P2)
