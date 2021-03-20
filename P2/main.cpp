@@ -5,7 +5,7 @@
 
 #include "gamma.cpp"
 
-#define TITLE "Janela Temporizada"
+#define TITLE "Gamma"
 #define MAX_TIME_SECONDS 30
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
