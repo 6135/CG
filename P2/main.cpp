@@ -28,11 +28,11 @@ const char *fragmentShaderSource = "#version 330 core\n"
     "   FragColor = ourColor;\n"
     "}\n\0";
 // settings
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 800;
-GLfloat red = 0.2f;
-GLfloat green = 0.2f;
-GLfloat blue = 0.2f;
+const unsigned int SCR_WIDTH = 900;
+const unsigned int SCR_HEIGHT = 900;
+GLfloat red = 0.6f;
+GLfloat green = 0.5f;
+GLfloat blue = 0.1f;
 GLfloat alpha = 1.0f;
 
 unsigned int VBO, VAO, EBO;
@@ -152,6 +152,7 @@ int main()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_SAMPLES,8);
 
 #ifdef __APPLE__
   glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
@@ -182,7 +183,7 @@ int main()
         // float time_value = glfwGetTime();
         float green_value = /*sin(time_value) / */2.0f + 0.5f;
         int vertex_color_location = glGetUniformLocation(shaderProgram,"ourColor");
-        glUniform4f(vertex_color_location,0.0f,green_value,0.0f,1.0f);
+        glUniform4f(vertex_color_location,red,green,blue,1.0f);
 
         glBindVertexArray(VAO);
         // seeing as we only have a single VAO there's no need to bind
@@ -212,7 +213,7 @@ int main()
 
 /* sets color specified in arguments
 -----------------------------------------------------------------------*/
-void glSetClearColor(GLfloat r, GLfloat g, GLfloat b,GLfloat a){
+void glSetColor(GLfloat r, GLfloat g, GLfloat b,GLfloat a){
   red = r;
   green = g;
   blue = b;
@@ -228,13 +229,13 @@ void processInput()
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
 //   if(glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) {
-//     glSetClearColor(1.0f,0.0f,0.0f,1.0f);
+//     glSetColor(1.0f,0.0f,0.0f,1.0f);
 //   }
 //   if(glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS){
-//     glSetClearColor(0.0f,1.0f,0.0f,1.0f);
+//     glSetColor(0.0f,1.0f,0.0f,1.0f);
 //   }
 //   if(glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS){
-//       glSetClearColor(0.0f,0.0f,1.0f,1.0f);
+//       glSetColor(0.0f,0.0f,1.0f,1.0f);
 //   }
 }
 
