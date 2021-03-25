@@ -16,3 +16,8 @@ add_subdirectory(glad)
 include_directories(
         glad/include/glad/
 )
+### GLM ###
+add_subdirectory(glm)
+include_directories(
+        glm/glm
+)

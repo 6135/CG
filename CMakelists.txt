@@ -20,13 +20,17 @@ add_subdirectory(external)
 include_directories(
     external/glfw-3.3.3/include/GLFW/
     external/glad/include
+    external/glm/glm
 )
 
 set(ALL_LIBS
     ${OPENGL_LIBRARY}
     glfw
-    glad    
+    glad 
+    glm   
 )
 
 add_subdirectory(P1)
 add_subdirectory(P2)
+add_subdirectory(TP2)
+add_subdirectory(TP3)
