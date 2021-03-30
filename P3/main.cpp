@@ -7,7 +7,18 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "gamma.cpp"
 
+/******SIDES*******/
+int operate = 0;
 
+#define NOPER 0
+#define FORWAD 1
+#define BACK 2
+#define LEFT 3
+#define RIGHT 4
+#define TOP 5
+#define BOTTOM 6
+
+/*************/
 #define TITLE "Gamma 3D"
 #define MAX_TIME_SECONDS 30
 
@@ -49,7 +60,6 @@ unsigned int VBO, VAO, EBO;
 unsigned int shaderProgram, vertexShader,fragmentShader;
 GLFWwindow* window;
 
-
 void vertex_data_init(){
     glGenBuffers(1, &VBO);
     glGenBuffers(1, &EBO);
@@ -63,9 +73,10 @@ void vertex_data_init(){
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(index), index, GL_STATIC_DRAW);
 
+    // Model = glm::rotate(Model, glm::radians(45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
     Model = glm::rotate(Model, glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
     View = glm::translate(View, glm::vec3(0.0f, 0.0f, -3.0f));
-    Projection = glm::perspective(glm::radians(45.0f), 4.0f / 3.0f, 0.1f, 100.0f);
+    Projection = glm::perspective(glm::radians(30.0f), 4.0f / 3.0f, 0.1f, 100.0f);
     MVP = Projection * View * Model;
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
@@ -219,20 +230,44 @@ void glSetColor(GLfloat r, GLfloat g, GLfloat b,GLfloat a){
 /* process all input: query GLFW whether relevant keys are pressed/released 
 this frame and react accordingly 
 -----------------------------------------------------------------------*/
+void rotateModel(float degrees, float x, float y, float z){
+    Model = glm::mat4(1.0f);
+    Model = glm::rotate(Model, glm::radians(degrees), glm::vec3(x, y, z));
+    MVP = Projection * View * Model;
+}
 
 void processInput()
 {
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
-//   if(glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) {
-//     glSetColor(1.0f,0.0f,0.0f,1.0f);
-//   }
-//   if(glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS){
-//     glSetColor(0.0f,1.0f,0.0f,1.0f);
-//   }
-//   if(glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS){
-//       glSetColor(0.0f,0.0f,1.0f,1.0f);
-//   }
+    
+    
+    if(glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) { //Esquerda
+        operate=LEFT;
+        rotateModel(89.0f, 0.0f, 1.0f, 0.0f);
+    }
+    if(glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) { //Direita
+        operate=RIGHT;
+        rotateModel(-89.0f,0.0f,1.0f,0.0f);
+    }
+    if(glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS) { //Frente
+        operate=FORWAD;
+        rotateModel(0.0f,0.0f,1.0f,0.0f);
+    }
+    if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) { //Atras
+        operate=BACK;
+        rotateModel(180.0f,0.0f,1.0f,0.0f);
+    }
+    if(glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS) {//Cima
+        operate=TOP;
+        rotateModel(89.0f,1.0f,0.0f,0.0f);
+    }
+    if(glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS) {//Baixo
+        operate=BOTTOM;
+        rotateModel(-89.0f,1.0f,0.0f,0.0f);
+    }
+    
+
 }
 
 /* glfw: whenever the window size changed (by OS or user resize) this

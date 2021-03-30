@@ -21,7 +21,7 @@ const float vertices[] = {
     -0.2716f,	 0.5034f,	0.0f,		//T 17
     -0.2620f,	 0.4879f,	0.0f,		//U 18
     -0.2528f,	 0.4617f,	0.0f,		//V 19
-    -0.0821f,	 0.5090f,	0.0f,		//W 20
+    -0.0821f,	 0.5092f,	0.0f,		//W 20
     -0.0680f,	 0.5092f,	0.0f,		//Z 21
      0.2415f,	 0.5013f,	0.0f,		//A1 22
      0.2696f,	 0.4887f,	0.0f,		//B1 23
@@ -58,7 +58,7 @@ const float vertices[] = {
     -0.2716f,	 0.5034f,	-0.05f,		//T 51
     -0.2620f,	 0.4879f,	-0.05f,		//U 52
     -0.2528f,	 0.4617f,	-0.05f,		//V 53
-    -0.0821f,	 0.5090f,	-0.05f,		//W 54
+    -0.0821f,	 0.5092f,	-0.05f,		//W 54
     -0.0680f,	 0.5092f,	-0.05f,		//Z 55
      0.2415f,	 0.5013f,	-0.05f,		//A1 56
      0.2696f,	 0.4887f,	-0.05f,		//B1 57
@@ -141,6 +141,38 @@ const int index[] = {
 
     //depth
 
+    // 0, 34, 35,
+    // 0, 1, 35, //bottom flat surface
+
+    // 0, 19, 34, //back side piece
+    // 19, 34, 53,
+
+    // 1, 2, 35, //front side piece
+    // 35, 36, 2,
+
+    // 11, 33, 67, //top flat piece
+    // 67, 11, 45,
+    // 11, 12, 45, // top left side piece
+    // 12, 45, 46,
+
+    // 33, 32, 66,//top right flat piece + updwards bend part 1
+    // 33, 67, 66,
+    // 32, 66, 31, //top right flat piece + updwards bend part 2
+    // 31, 65, 66,
+
+    // 65, 31, 5, //top front piece part 1
+    // 5, 39, 65,
+    // 5, 39, 29, //top front piece part 2
+    // 29, 63, 39,
+    // 29, 30, 63, //top front piece down part
+    // 30, 64, 63,
+
+    /** top front piece left curve **/
+
+    /*****/
+
+    // 6, 20, 40, //top right down flat piece
+    // 20, 54, 40,
 
 };
 const int triangle_count = NUMBER_ELEMENTS(index);
