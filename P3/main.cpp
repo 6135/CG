@@ -95,7 +95,8 @@ void vertex_data_init(){
     glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0); 
     glBindVertexArray(0); 
-
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);   
 }
 
 void shader_setup(){
@@ -196,8 +197,8 @@ int main()
         
         //glClearColor(0.5f, 0.5f, 0.5f, 1.0f); //grey rendering
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);   //green? rendering
-        glEnable(GL_DEPTH_TEST);
-        glDepthFunc(GL_LESS);   
+
+
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // draw our first triangle: using shader program

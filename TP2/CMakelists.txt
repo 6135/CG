@@ -3,6 +3,5 @@ target_link_libraries(TP2
     LINK_PUBLIC
         glfw
         glad
-        gl
         ${CMAKE_DL_LIBS}
 )
