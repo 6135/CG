@@ -1,0 +1,8 @@
+add_executable(P3 main.cpp)
+target_link_libraries(P3
+    LINK_PUBLIC
+        glfw
+        glad
+        glm
+        ${CMAKE_DL_LIBS}
+)
