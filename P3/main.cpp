@@ -27,21 +27,23 @@ void processInput();
 
 const char *vertexShaderSource = "#version 330 core\n"
     "layout (location = 0) in vec3 aPos;\n"
+    "layout (location = 1) in vec3 vertexColor;\n"
+    "out vec3 fragmentColor;\n"
     "uniform mat4 MVP;\n"
     "void main()\n""{\n"
     "   gl_Position = MVP * vec4(aPos, 1.0);\n"
+    "   fragmentColor = vertexColor;\n"
     "}\0";
 
 // declare and define fshader, position in color vector declaration
 // are RGBA from [0,1] simply in and out
 const char *fragmentShaderSource = "#version 330 core\n"
-    "out vec4 FragColor;\n"
-    "uniform vec4 ourColor;\n"
-    "void main()\n"
-    "{\n"
-    "   FragColor = ourColor;\n"
-    "}\n\0";
-// settings
+"in vec3 fragmentColor;\n;"
+"out vec3 FragColor;\n"
+"void main()\n"
+"{\n"
+" FragColor = fragmentColor;\n"
+"}\n\0";
 
 
 unsigned int MatrixID;
@@ -55,33 +57,44 @@ GLfloat red = 0.6f;
 GLfloat green = 0.5f;
 GLfloat blue = 0.1f;
 GLfloat alpha = 1.0f;
-
+GLuint colorbuffer;
 unsigned int VBO, VAO, EBO;
 unsigned int shaderProgram, vertexShader,fragmentShader;
 GLFWwindow* window;
 
 void vertex_data_init(){
-    glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
-
+    glEnableVertexAttribArray(1);
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
 
+    glGenBuffers(1, &VBO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
+    // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //wireframe mode
+
+    glGenBuffers(1, &EBO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(index), index, GL_STATIC_DRAW);
-
-    // Model = glm::rotate(Model, glm::radians(45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-    Model = glm::rotate(Model, glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-    View = glm::translate(View, glm::vec3(0.0f, 0.0f, -3.0f));
-    Projection = glm::perspective(glm::radians(30.0f), 4.0f / 3.0f, 0.1f, 100.0f);
-    MVP = Projection * View * Model;
-
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
+    // Model = glm::rotate(Model, glm::radians(45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+    Model = glm::rotate(Model, glm::radians(30.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+    View = glm::translate(View, glm::vec3(0.0f, 0.0f, -3.0f));
+    // Projection = glm::perspective(glm::radians(45.0f), 4.0f / 3.0f, 0.1f, 100.0f);
+    Projection = glm::ortho(-1.0f,1.0f,-1.0f,1.0f,0.0f,100.0f);
+    MVP = Projection * View * Model;
 
+    glGenBuffers(1, &colorbuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(1);
+    glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
+    glVertexAttribPointer(1,3,GL_FLOAT,GL_FALSE,0,(void*)0);
+
+    
+
+    glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0); 
     glBindVertexArray(0); 
 
@@ -185,7 +198,9 @@ int main()
         
         //glClearColor(0.5f, 0.5f, 0.5f, 1.0f); //grey rendering
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);   //green? rendering
-        glClear(GL_COLOR_BUFFER_BIT);
+        glEnable(GL_DEPTH_TEST);
+        glDepthFunc(GL_LESS);   
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // draw our first triangle: using shader program
         glUseProgram(shaderProgram);
@@ -193,8 +208,7 @@ int main()
         glBindVertexArray(VAO);
         // seeing as we only have a single VAO there's no need to bind
         // it every time, but we'll do so to keep things a bit more organized
-        int vertex_color_location = glGetUniformLocation(shaderProgram,"ourColor");
-        glUniform4f(vertex_color_location,red,green,blue,1.0f);
+ 
         glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
         glDrawElements(GL_TRIANGLES, triangle_count ,GL_UNSIGNED_INT,0);
         // glBindVertexArray(0); // no need to unbind it every time 
@@ -244,11 +258,11 @@ void processInput()
     
     if(glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) { //Esquerda
         operate=LEFT;
-        rotateModel(89.0f, 0.0f, 1.0f, 0.0f);
+        rotateModel(90.0f, 0.0f, 1.0f, 0.0f);
     }
     if(glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) { //Direita
         operate=RIGHT;
-        rotateModel(-89.0f,0.0f,1.0f,0.0f);
+        rotateModel(-90.0f,0.0f,1.0f,0.0f);
     }
     if(glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS) { //Frente
         operate=FORWAD;
@@ -260,11 +274,11 @@ void processInput()
     }
     if(glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS) {//Cima
         operate=TOP;
-        rotateModel(89.0f,1.0f,0.0f,0.0f);
+        rotateModel(90.0f,1.0f,0.0f,0.0f);
     }
     if(glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS) {//Baixo
         operate=BOTTOM;
-        rotateModel(-89.0f,1.0f,0.0f,0.0f);
+        rotateModel(-90.0f,1.0f,0.0f,0.0f);
     }
     
 
