@@ -78,8 +78,10 @@ void vertex_data_init(){
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(index), index, GL_STATIC_DRAW);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
+    // Model = glm::rotate(Model, glm::radians(45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
     Model = glm::rotate(Model, glm::radians(30.0f), glm::vec3(1.0f, 0.0f, 0.0f));
     View = glm::translate(View, glm::vec3(0.0f, 0.0f, -3.0f));
+    // Projection = glm::perspective(glm::radians(45.0f), 4.0f / 3.0f, 0.1f, 100.0f);
     Projection = glm::ortho(-1.0f,1.0f,-1.0f,1.0f,0.0f,100.0f);
     MVP = Projection * View * Model;
 
