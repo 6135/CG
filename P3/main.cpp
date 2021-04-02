@@ -57,6 +57,7 @@ GLfloat red = 0.6f;
 GLfloat green = 0.5f;
 GLfloat blue = 0.1f;
 GLfloat alpha = 1.0f;
+
 GLuint colorbuffer;
 unsigned int VBO, VAO, EBO;
 unsigned int shaderProgram, vertexShader,fragmentShader;
@@ -78,10 +79,9 @@ void vertex_data_init(){
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(index), index, GL_STATIC_DRAW);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
-    // Model = glm::rotate(Model, glm::radians(45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+
     Model = glm::rotate(Model, glm::radians(30.0f), glm::vec3(1.0f, 0.0f, 0.0f));
     View = glm::translate(View, glm::vec3(0.0f, 0.0f, -3.0f));
-    // Projection = glm::perspective(glm::radians(45.0f), 4.0f / 3.0f, 0.1f, 100.0f);
     Projection = glm::ortho(-1.0f,1.0f,-1.0f,1.0f,0.0f,100.0f);
     MVP = Projection * View * Model;
 
@@ -89,10 +89,9 @@ void vertex_data_init(){
     glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
     glEnableVertexAttribArray(1);
-    glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
     glVertexAttribPointer(1,3,GL_FLOAT,GL_FALSE,0,(void*)0);
-
     glEnableVertexAttribArray(0);
+    
     glBindBuffer(GL_ARRAY_BUFFER, 0); 
     glBindVertexArray(0); 
     glEnable(GL_DEPTH_TEST);
@@ -207,7 +206,8 @@ int main()
         glBindVertexArray(VAO);
         // seeing as we only have a single VAO there's no need to bind
         // it every time, but we'll do so to keep things a bit more organized
- 
+    
+
         glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
         glDrawElements(GL_TRIANGLES, triangle_count ,GL_UNSIGNED_INT,0);
         // glBindVertexArray(0); // no need to unbind it every time 
@@ -243,9 +243,11 @@ void glSetColor(GLfloat r, GLfloat g, GLfloat b,GLfloat a){
 /* process all input: query GLFW whether relevant keys are pressed/released 
 this frame and react accordingly 
 -----------------------------------------------------------------------*/
-void rotateModel(float degrees, float x, float y, float z){
-    Model = glm::mat4(1.0f);
-    Model = glm::rotate(Model, glm::radians(degrees), glm::vec3(x, y, z));
+void changeCameraAndRotation(glm::vec3 eye,glm::vec3 target = glm::vec3(0,0,0), glm::vec3 up = glm::vec3(0,1,0),
+    float degrees = 0.0f, float x = 1.0f, float y = 0.0f, float z = 0.0f)
+    {
+    Model = glm::rotate(glm::mat4(1.0f), glm::radians(degrees), glm::vec3(x, y, z));
+    View = glm::lookAt(eye,target,up);
     MVP = Projection * View * Model;
 }
 
@@ -256,28 +258,22 @@ void processInput()
     
     
     if(glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) { //Esquerda
-        operate=LEFT;
-        rotateModel(90.0f, 0.0f, 1.0f, 0.0f);
+        changeCameraAndRotation(glm::vec3(-1,0,0));
     }
     if(glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) { //Direita
-        operate=RIGHT;
-        rotateModel(-90.0f,0.0f,1.0f,0.0f);
+        changeCameraAndRotation(glm::vec3(1,0,0));
     }
     if(glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS) { //Frente
-        operate=FORWAD;
-        rotateModel(0.0f,0.0f,1.0f,0.0f);
+        changeCameraAndRotation(glm::vec3(0,0,1));
     }
     if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) { //Atras
-        operate=BACK;
-        rotateModel(180.0f,0.0f,1.0f,0.0f);
+        changeCameraAndRotation(glm::vec3(0,0,-1));
     }
     if(glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS) {//Cima
-        operate=TOP;
-        rotateModel(90.0f,1.0f,0.0f,0.0f);
+        changeCameraAndRotation(glm::vec3(0.0, 1.0f, 0.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, -1.0));
     }
     if(glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS) {//Baixo
-        operate=BOTTOM;
-        rotateModel(-90.0f,1.0f,0.0f,0.0f);
+        changeCameraAndRotation(glm::vec3(0.0, -1.0f, 0.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 1.0));
     }
     
 
