@@ -51,6 +51,7 @@ glm::mat4 Model = glm::mat4(1.0f);
 glm::mat4 View = glm::mat4(1.0f);
 glm::mat4 Projection = glm::mat4(1.0f);
 glm::mat4 MVP;
+
 const unsigned int SCR_WIDTH = 900;
 const unsigned int SCR_HEIGHT = 900;
 GLfloat red = 0.6f;
@@ -62,6 +63,11 @@ GLuint colorbuffer;
 unsigned int VBO, VAO, EBO;
 unsigned int shaderProgram, vertexShader,fragmentShader;
 GLFWwindow* window;
+
+void changeCameraAndRotation(glm::vec3 eye, glm::vec3 target = glm::vec3(0,0,0), glm::vec3 up = glm::vec3(0,1,0)){
+    View = glm::lookAt(eye,target,up);
+    MVP = Projection * View * Model;
+}
 
 void vertex_data_init(){
     glEnableVertexAttribArray(1);
@@ -80,8 +86,8 @@ void vertex_data_init(){
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
-    Model = glm::rotate(Model, glm::radians(30.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-    View = glm::translate(View, glm::vec3(0.0f, 0.0f, -3.0f));
+    Model = glm::rotate(Model, glm::radians(30.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+    changeCameraAndRotation(glm::vec3(0,0,1));
     Projection = glm::ortho(-1.0f,1.0f,-1.0f,1.0f,0.0f,100.0f);
     MVP = Projection * View * Model;
 
@@ -243,20 +249,12 @@ void glSetColor(GLfloat r, GLfloat g, GLfloat b,GLfloat a){
 /* process all input: query GLFW whether relevant keys are pressed/released 
 this frame and react accordingly 
 -----------------------------------------------------------------------*/
-void changeCameraAndRotation(glm::vec3 eye,glm::vec3 target = glm::vec3(0,0,0), glm::vec3 up = glm::vec3(0,1,0),
-    float degrees = 0.0f, float x = 1.0f, float y = 0.0f, float z = 0.0f)
-    {
-    Model = glm::rotate(glm::mat4(1.0f), glm::radians(degrees), glm::vec3(x, y, z));
-    View = glm::lookAt(eye,target,up);
-    MVP = Projection * View * Model;
-}
+
 
 void processInput()
 {
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
-    
-    
     if(glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) { //Esquerda
         changeCameraAndRotation(glm::vec3(-1,0,0));
     }
@@ -270,7 +268,7 @@ void processInput()
         changeCameraAndRotation(glm::vec3(0,0,-1));
     }
     if(glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS) {//Cima
-        changeCameraAndRotation(glm::vec3(0.0, 1.0f, 0.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, -1.0));
+        changeCameraAndRotation(glm::vec3(0.0, 1.0f, 0.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 1.0));
     }
     if(glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS) {//Baixo
         changeCameraAndRotation(glm::vec3(0.0, -1.0f, 0.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 1.0));
