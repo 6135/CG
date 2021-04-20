@@ -33,5 +33,6 @@ set(ALL_LIBS
 add_subdirectory(P1)
 add_subdirectory(P2)
 add_subdirectory(P3)
+add_subdirectory(P4)
 add_subdirectory(TP2)
 add_subdirectory(TP3)
